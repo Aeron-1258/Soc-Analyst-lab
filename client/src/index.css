@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #020617;
+  --color-panel: rgba(15, 23, 42, 0.7);
+  
+  --color-neon-blue: #0ea5e9;
+  --color-neon-green: #22c55e;
+  --color-neon-red: #ef4444;
+  --color-neon-yellow: #eab308;
+  --color-neon-cyan: #06b6d4;
+  --color-neon-purple: #a855f7;
+
+  --shadow-neon-blue: 0 0 10px rgba(14, 165, 233, 0.5);
+  --shadow-neon-green: 0 0 10px rgba(34, 197, 94, 0.5);
+  --shadow-neon-red: 0 0 10px rgba(239, 68, 68, 0.5);
+
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-slate-200 overflow-x-hidden font-sans;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-panel backdrop-blur-md border border-slate-700/50 rounded-xl;
+  }
+
+  .neon-border-blue {
+    @apply border-neon-blue shadow-neon-blue;
+  }
+
+  .neon-border-green {
+    @apply border-neon-green shadow-neon-green;
+  }
+
+  .neon-border-red {
+    @apply border-neon-red shadow-neon-red;
+  }
+
+  .cyber-grid-bg {
+    background-image: radial-gradient(rgba(14, 165, 233, 0.1) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Settings-based overrides */
+.no-neon {
+  --shadow-neon-blue: none !important;
+  --shadow-neon-green: none !important;
+  --shadow-neon-red: none !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.no-grid .cyber-grid-bg {
+  background-image: none !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-700 rounded-full hover:bg-neon-blue transition-colors;
+}
+
+/* Animations */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(14, 165, 233, 0.2), transparent);
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+}

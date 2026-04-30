@@ -1,0 +1,14 @@
+{
+  "name": "soc-lab",
+  "version": "1.0.0",
+  "description": "Professional SOC Analyst Dashboard",
+  "scripts": {
+    "client": "npm run dev --prefix client",
+    "server": "npm run dev --prefix server",
+    "dev": "concurrently \"npm run client\" \"npm run server\"",
+    "install-all": "npm install && npm install --prefix client && npm install --prefix server"
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
