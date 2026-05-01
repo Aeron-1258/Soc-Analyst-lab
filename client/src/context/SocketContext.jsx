@@ -15,7 +15,8 @@ export const SocketProvider = ({ children }) => {
   const [blacklist, setBlacklist] = useState(["192.168.1.100", "45.12.33.1"]); // Initial dummy data
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5000');
+    const socketUrl = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+    const newSocket = io(socketUrl);
     setSocket(newSocket);
 
     newSocket.on('initial_alerts', (initialAlerts) => {
