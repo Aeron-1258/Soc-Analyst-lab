@@ -5,26 +5,14 @@ import { useSocket } from '../context/SocketContext';
 import { toast } from 'react-hot-toast';
 
 const DefenseHub = () => {
-  const { socket } = useSocket();
-  const [isMitigating, setIsMitigating] = useState(false);
+  const { isConnected, simulateAttack, isMitigating } = useSocket();
 
   const triggerBreach = () => {
-    socket.emit('simulate_breach');
+    simulateAttack("🔥 MANUAL BREACH");
     toast.error("ALERT: MANUAL BREACH INJECTED", {
       icon: '🔥',
       style: { border: '1px solid #ef4444' }
     });
-  };
-
-  const activateDefense = () => {
-    setIsMitigating(true);
-    socket.emit('activate_mitigation');
-    toast.success("DEFENSE SYSTEM ACTIVATED: Threats Mitigated", {
-      icon: '🛡️',
-      style: { border: '1px solid #22c55e' }
-    });
-
-    setTimeout(() => setIsMitigating(false), 10000);
   };
 
   return (
@@ -45,10 +33,7 @@ const DefenseHub = () => {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => {
-            socket.emit('simulate_breach');
-            fetch('http://localhost:5000/api/attack/sql-injection', { method: 'POST' });
-          }}
+          onClick={() => simulateAttack("💉 SQL INJECTION")}
           className="flex flex-col items-center justify-center p-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-neon-red/40 transition-all"
         >
           <Target className="text-neon-red mb-2" size={20} />
@@ -59,7 +44,7 @@ const DefenseHub = () => {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => fetch('http://localhost:5000/api/attack/ddos', { method: 'POST' })}
+          onClick={() => simulateAttack("🌀 DDOS ATTACK")}
           className="flex flex-col items-center justify-center p-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-neon-purple/40 transition-all"
         >
           <Zap className="text-neon-purple mb-2" size={20} />
@@ -70,7 +55,7 @@ const DefenseHub = () => {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => fetch('http://localhost:5000/api/attack/malware', { method: 'POST' })}
+          onClick={() => simulateAttack("🦠 MALWARE")}
           className="flex flex-col items-center justify-center p-3 bg-slate-900/40 border border-slate-800 rounded-xl hover:border-neon-yellow/40 transition-all"
         >
           <AlertTriangle className="text-neon-yellow mb-2" size={20} />
@@ -81,7 +66,7 @@ const DefenseHub = () => {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={activateDefense}
+          onClick={() => simulateAttack("🛡️ MANUAL MITIGATION")}
           disabled={isMitigating}
           className={`flex flex-col items-center justify-center p-3 rounded-xl transition-all ${
             isMitigating 

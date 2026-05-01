@@ -10,7 +10,7 @@ import FirewallTerminal from '../components/FirewallTerminal';
 import { ShieldAlert, Activity, Globe, Zap } from 'lucide-react';
 
 const Dashboard = () => {
-  const { alerts, trafficData, threats, isMitigating } = useSocket();
+  const { alerts, trafficData, threats, isMitigating, isConnected } = useSocket();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -40,10 +40,17 @@ const Dashboard = () => {
           <p className="text-slate-400 text-sm">Real-time threat intelligence and network analysis</p>
         </div>
         <div className="flex gap-2">
-          <span className="flex items-center gap-1.5 px-3 py-1 bg-neon-green/10 text-neon-green border border-neon-green/30 rounded-full text-xs font-bold animate-pulse">
-            <span className="w-2 h-2 bg-neon-green rounded-full"></span>
-            LIVE SERVER
-          </span>
+          {isConnected ? (
+            <span className="flex items-center gap-1.5 px-3 py-1 bg-neon-green/10 text-neon-green border border-neon-green/30 rounded-full text-xs font-bold animate-pulse">
+              <span className="w-2 h-2 bg-neon-green rounded-full"></span>
+              LIVE SERVER
+            </span>
+          ) : (
+            <span className="flex items-center gap-1.5 px-3 py-1 bg-neon-blue/10 text-neon-blue border border-neon-blue/30 rounded-full text-xs font-bold">
+              <span className="w-2 h-2 bg-neon-blue rounded-full animate-ping"></span>
+              STANDALONE MODE
+            </span>
+          )}
         </div>
       </div>
 
