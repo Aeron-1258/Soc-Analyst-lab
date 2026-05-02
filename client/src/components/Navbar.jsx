@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, User, Search, Clock } from 'lucide-react';
+import { Bell, User, Search, Clock, Menu } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar }) => {
   const { currentUser } = useAuth();
   const { alerts } = useSocket();
   const [time, setTime] = useState(new Date());
@@ -16,20 +16,27 @@ const Navbar = () => {
   const criticalCount = alerts.filter(a => a.severity === 'Critical').length;
 
   return (
-    <header className="h-16 glass-panel m-4 mb-0 flex items-center justify-between px-6 border-b border-slate-800/50">
-      <div className="flex items-center gap-4 flex-1">
-        <div className="relative w-96">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+    <header className="h-16 glass-panel m-4 mb-0 flex items-center justify-between px-4 md:px-6 border-b border-slate-800/50">
+      <div className="flex items-center gap-3 md:gap-4 flex-1">
+        <button 
+          onClick={toggleSidebar}
+          className="lg:hidden p-2 text-slate-400 hover:text-white bg-slate-800/40 rounded-lg border border-slate-700/50"
+        >
+          <Menu size={20} />
+        </button>
+        
+        <div className="relative flex-1 max-w-xs md:max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
           <input 
             type="text" 
-            placeholder="Search threats, IPs, or logs..." 
-            className="w-full bg-slate-900/50 border border-slate-700/50 rounded-lg py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-neon-blue/50 transition-colors"
+            placeholder="Search..." 
+            className="w-full bg-slate-900/50 border border-slate-700/50 rounded-lg py-1.5 md:py-2 pl-9 md:pl-10 pr-4 text-xs md:text-sm focus:outline-none focus:border-neon-blue/50 transition-colors"
           />
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
-        <div className="flex items-center gap-2 text-slate-400 font-mono text-sm border-r border-slate-800 pr-6">
+      <div className="flex items-center gap-2 md:gap-6">
+        <div className="hidden sm:flex items-center gap-2 text-slate-400 font-mono text-xs md:text-sm border-r border-slate-800 pr-4 md:pr-6">
           <Clock size={16} />
           <span>{time.toLocaleTimeString()}</span>
         </div>
@@ -45,13 +52,13 @@ const Navbar = () => {
           </button>
         </div>
 
-        <div className="flex items-center gap-3 pl-4">
-          <div className="text-right">
-            <p className="text-sm font-medium text-white">{currentUser?.email?.split('@')[0] || 'Analyst'}</p>
-            <p className="text-xs text-slate-500">Tier 3 Analyst</p>
+        <div className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4">
+          <div className="text-right hidden xs:block">
+            <p className="text-xs md:text-sm font-medium text-white">{currentUser?.email?.split('@')[0] || 'Analyst'}</p>
+            <p className="text-[10px] md:text-xs text-slate-500">Tier 3</p>
           </div>
-          <div className="w-10 h-10 rounded-full bg-neon-blue/20 border border-neon-blue/50 flex items-center justify-center text-neon-blue">
-            <User size={20} />
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-neon-blue/20 border border-neon-blue/50 flex items-center justify-center text-neon-blue">
+            <User size={18} md:size={20} />
           </div>
         </div>
       </div>

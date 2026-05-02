@@ -32,22 +32,22 @@ const Dashboard = () => {
       animate="visible"
       className="space-y-6"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Activity className="text-neon-blue" /> System Overview
+          <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+            <Activity className="text-neon-blue" size={20} /> System Overview
           </h2>
-          <p className="text-slate-400 text-sm">Real-time threat intelligence and network analysis</p>
+          <p className="text-slate-400 text-xs md:text-sm">Real-time threat intelligence and network analysis</p>
         </div>
         <div className="flex gap-2">
           {isConnected ? (
-            <span className="flex items-center gap-1.5 px-3 py-1 bg-neon-green/10 text-neon-green border border-neon-green/30 rounded-full text-xs font-bold animate-pulse">
-              <span className="w-2 h-2 bg-neon-green rounded-full"></span>
+            <span className="flex items-center gap-1.5 px-3 py-1 bg-neon-green/10 text-neon-green border border-neon-green/30 rounded-full text-[10px] md:text-xs font-bold animate-pulse">
+              <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-neon-green rounded-full"></span>
               LIVE SERVER
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 px-3 py-1 bg-neon-blue/10 text-neon-blue border border-neon-blue/30 rounded-full text-xs font-bold">
-              <span className="w-2 h-2 bg-neon-blue rounded-full animate-ping"></span>
+            <span className="flex items-center gap-1.5 px-3 py-1 bg-neon-blue/10 text-neon-blue border border-neon-blue/30 rounded-full text-[10px] md:text-xs font-bold">
+              <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-neon-blue rounded-full animate-ping"></span>
               STANDALONE MODE
             </span>
           )}

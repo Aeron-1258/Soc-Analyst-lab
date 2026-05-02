@@ -11,9 +11,11 @@ import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import CyberGridBackground from './components/CyberGridBackground';
 import { Toaster } from 'react-hot-toast';
+import { useState } from 'react';
 
 const ProtectedRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   if (loading) return (
     <div className="h-screen w-screen flex items-center justify-center bg-background">
@@ -24,12 +26,12 @@ const ProtectedRoute = ({ children }) => {
   if (!currentUser) return <Navigate to="/login" />;
   
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-screen overflow-hidden bg-background relative">
       <CyberGridBackground />
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
       <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
-        <Navbar />
-        <main className="flex-1 overflow-y-auto p-6 scrollbar-hide">
+        <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 scrollbar-hide">
           {children}
         </main>
       </div>
