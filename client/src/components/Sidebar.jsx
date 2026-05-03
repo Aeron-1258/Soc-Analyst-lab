@@ -51,7 +51,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <ShieldCheck className="text-neon-blue" size={24} />
             </div>
             <h1 className="text-xl font-bold tracking-tight text-white">
-              SOC<span className="text-neon-blue">AI</span>
+              Intelli<span className="text-neon-blue">SOC</span>
             </h1>
           </div>
           <button 

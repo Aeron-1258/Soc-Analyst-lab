@@ -4,6 +4,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import AlertsPage from './pages/AlertsPage';
 import SettingsPage from './pages/SettingsPage';
+import ThreatMapPage from './pages/ThreatMapPage';
+import LogsPage from './pages/LogsPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
 import { SettingsProvider } from './context/SettingsContext';
@@ -62,6 +64,8 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/alerts" element={<ProtectedRoute><AlertsPage /></ProtectedRoute>} />
+              <Route path="/threat-map" element={<ProtectedRoute><ThreatMapPage /></ProtectedRoute>} />
+              <Route path="/logs" element={<ProtectedRoute><LogsPage /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

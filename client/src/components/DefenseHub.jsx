@@ -5,7 +5,7 @@ import { useSocket } from '../context/SocketContext';
 import { toast } from 'react-hot-toast';
 
 const DefenseHub = () => {
-  const { isConnected, simulateAttack, isMitigating } = useSocket();
+  const { isConnected, simulateAttack, simulateCompromise, simulatePhishing, isMitigating } = useSocket();
 
   const triggerBreach = () => {
     simulateAttack("🔥 MANUAL BREACH");
@@ -82,6 +82,40 @@ const DefenseHub = () => {
           <span className="text-[10px] font-bold text-white uppercase">
             {isMitigating ? 'Mitigated' : 'Mitigate'}
           </span>
+        </motion.button>
+      </div>
+
+      <div className="grid grid-cols-1 mt-4">
+        <motion.button
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+          onClick={() => {
+            simulateCompromise();
+            toast.error("DETECTED: SUSPICIOUS LOGIN SEQUENCE", {
+              icon: '👤',
+              style: { border: '1px solid #ef4444', background: '#0f172a', color: '#fff' }
+            });
+          }}
+          className="flex items-center justify-center gap-3 p-3 bg-neon-red/10 border border-neon-red/30 rounded-xl hover:bg-neon-red/20 transition-all text-neon-red group"
+        >
+          <Flame size={20} className="group-hover:animate-bounce" />
+          <span className="text-xs font-bold uppercase tracking-widest">Simulate Account Compromise</span>
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+          onClick={() => {
+            simulatePhishing();
+            toast.error("DETECTED: SUSPICIOUS EMAIL ACTIVITY", {
+              icon: '📧',
+              style: { border: '1px solid #ef4444', background: '#0f172a', color: '#fff' }
+            });
+          }}
+          className="flex items-center justify-center gap-3 p-3 bg-neon-blue/10 border border-neon-blue/30 rounded-xl hover:bg-neon-blue/20 transition-all text-neon-blue group mt-3"
+        >
+          <Target size={20} className="group-hover:animate-ping" />
+          <span className="text-xs font-bold uppercase tracking-widest">Simulate Phishing Attack</span>
         </motion.button>
       </div>
 

@@ -10,7 +10,17 @@ import FirewallTerminal from '../components/FirewallTerminal';
 import { ShieldAlert, Activity, Globe, Zap } from 'lucide-react';
 
 const Dashboard = () => {
-  const { alerts, trafficData, threats, isMitigating, isConnected } = useSocket();
+  const { alerts, trafficData, threats, isMitigating, isConnected, searchTerm } = useSocket();
+
+  const filteredAlerts = alerts.filter(a => 
+    a.type.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    a.sourceIP.includes(searchTerm)
+  );
+
+  const filteredThreats = threats.filter(t => 
+    t.type.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    t.from.ip.includes(searchTerm)
+  );
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -66,7 +76,7 @@ const Dashboard = () => {
             <span className="text-xs text-slate-500 font-mono">Active Nodes: {threats.length}</span>
           </div>
           <div className="flex-1 bg-slate-900/50 rounded-xl relative overflow-hidden border border-slate-800/50">
-             <ThreatMapComponent threats={threats} isMitigating={isMitigating} />
+             <ThreatMapComponent threats={filteredThreats} isMitigating={isMitigating} />
           </div>
         </motion.div>
 
@@ -78,7 +88,7 @@ const Dashboard = () => {
             </h3>
             <button className="text-xs text-neon-blue hover:underline">View All</button>
           </div>
-          <AlertList alerts={alerts.slice(0, 10)} />
+          <AlertList alerts={filteredAlerts.slice(0, 10)} />
         </motion.div>
       </div>
 

@@ -40,6 +40,7 @@ const generateTraffic = () => {
 const generateThreatMapPoint = () => {
   return {
     id: Math.random().toString(36).substr(2, 9),
+    type: ATTACK_TYPES[Math.floor(Math.random() * ATTACK_TYPES.length)],
     from: {
       lat: (Math.random() * 140) - 70,
       lng: (Math.random() * 360) - 180,
@@ -64,6 +65,7 @@ export const SocketProvider = ({ children }) => {
   const [isMitigating, setIsMitigating] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [blacklist, setBlacklist] = useState(["192.168.1.100", "45.12.33.1"]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // --- LOCAL SIMULATION ENGINE ---
   const triggerAlert = useCallback((alert) => {
@@ -159,6 +161,97 @@ export const SocketProvider = ({ children }) => {
     }
   };
 
+  const simulateCompromise = () => {
+    if (socket && isConnected) {
+      socket.emit('simulate_compromise');
+    } else {
+      // Standalone simulation fallback
+      const scenario = {
+        user: "j.doe@enterprise.com",
+        lastLogin: {
+          ip: "192.168.1.45",
+          location: "USA (New York)",
+          timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
+          device: "MacBook Pro - Chrome"
+        },
+        currentLogin: {
+          ip: "103.24.12.8",
+          location: "China (Beijing)",
+          timestamp: new Date().toISOString(),
+          device: "Unknown Linux Device - Firefox",
+          userAgent: "Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0",
+          mfaUsed: false
+        },
+        postLoginActivity: [
+          { action: "Accessed Payroll DB", time: "2 mins ago" },
+          { action: "Downloaded Customer_List.csv", time: "1 min ago" },
+          { action: "Changed API Keys", time: "30 seconds ago" }
+        ]
+      };
+
+      triggerAlert({
+        ...generateAlert(),
+        type: "🚨 SUSPICIOUS SUCCESSFUL LOGIN",
+        severity: "High",
+        sourceIP: scenario.currentLogin.ip,
+        location: scenario.currentLogin.location,
+        metadata: scenario
+      });
+    }
+  };
+
+  const simulatePhishing = () => {
+    console.log("Simulating Phishing Attack...");
+    if (socket && isConnected) {
+      socket.emit('simulate_phishing');
+    } else {
+      const scenario = {
+        sender: "security-update@enterprise-support.com",
+        displaySender: "IT Security Support",
+        subject: "Urgent: Action Required on Your Account",
+        headers: {
+          spf: "PASS",
+          dkim: "FAIL",
+          dmarc: "FAIL",
+          returnPath: "attacker-mta@evil-domain.ru"
+        },
+        links: [
+          { 
+            text: "Verify Account Here", 
+            hoverUrl: "http://enterprise-support.com/verify", 
+            actualUrl: "http://bit.ly/3xJkL9q",
+            isMismatch: true,
+            isShortener: true
+          }
+        ],
+        attachments: [
+          {
+            name: "security_patch.exe",
+            hash: "a1b2c3d4e5f6g7h8i9j0",
+            size: "2.4 MB",
+            status: "Malicious",
+            threat: "Trojan.Generic"
+          }
+        ],
+        recipients: [
+          "j.doe@enterprise.com",
+          "a.smith@enterprise.com",
+          "b.jones@enterprise.com"
+        ]
+      };
+
+      console.log("Standalone mode: Triggering phishing alert locally");
+      triggerAlert({
+        ...generateAlert(),
+        type: "📧 PHISHING ATTEMPT DETECTED",
+        severity: "High",
+        sourceIP: "185.23.12.99",
+        location: "Russia (Moscow)",
+        metadata: scenario
+      });
+    }
+  };
+
   return (
     <SocketContext.Provider value={{ 
       socket, 
@@ -169,7 +262,11 @@ export const SocketProvider = ({ children }) => {
       blacklist, 
       setBlacklist,
       isConnected,
-      simulateAttack 
+      simulateAttack,
+      simulateCompromise,
+      simulatePhishing,
+      searchTerm,
+      setSearchTerm
     }}>
       {children}
     </SocketContext.Provider>

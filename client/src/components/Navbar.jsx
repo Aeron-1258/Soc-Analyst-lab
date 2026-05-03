@@ -5,7 +5,7 @@ import { useSocket } from '../context/SocketContext';
 
 const Navbar = ({ toggleSidebar }) => {
   const { currentUser } = useAuth();
-  const { alerts } = useSocket();
+  const { alerts, searchTerm, setSearchTerm } = useSocket();
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -31,6 +31,8 @@ const Navbar = ({ toggleSidebar }) => {
             type="text" 
             placeholder="Search..." 
             className="w-full bg-slate-900/50 border border-slate-700/50 rounded-lg py-1.5 md:py-2 pl-9 md:pl-10 pr-4 text-xs md:text-sm focus:outline-none focus:border-neon-blue/50 transition-colors"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>

@@ -47,7 +47,7 @@ const Login = () => {
             <ShieldCheck className="text-neon-blue" size={40} />
           </div>
           <h1 className="text-3xl font-bold text-white tracking-tight">
-            SOC<span className="text-neon-blue">AI</span> COMMAND
+            Intelli<span className="text-neon-blue">SOC</span> COMMAND
           </h1>
           <p className="text-slate-400 mt-2">Secure Analyst Terminal Access</p>
         </div>
