@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Activity, Shield, ShieldAlert, Target } from 'lucide-react';
+import { Activity, Shield, ShieldAlert } from 'lucide-react';
 
 const ThreatMapComponent = ({ threats, isMitigating }) => {
-  // Simplified realistic world map paths (approximate continent shapes)
+  // Realistic world map paths (approximate continent shapes)
   const worldPaths = [
     // North America
     "M 10 20 L 25 20 L 30 30 L 25 45 L 15 45 L 10 35 Z",
@@ -31,78 +31,45 @@ const ThreatMapComponent = ({ threats, isMitigating }) => {
   }, []);
 
   return (
-    <div className="w-full h-full relative bg-[#050505] overflow-hidden border border-white/5 rounded-2xl group">
-      {/* 1. Background Grid & Scanning Lines */}
-      <div className="absolute inset-0 opacity-15 pointer-events-none">
+    <div className="w-full h-full relative bg-[#0A0A0A] overflow-hidden border border-[#2A2A2A] rounded-lg group font-sans">
+      {/* 1. Background Grid */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
         <svg viewBox="0 0 100 100" className="w-full h-full">
           <defs>
             <pattern id="gridMap" width="8" height="8" patternUnits="userSpaceOnUse">
-              <path d="M 8 0 L 0 0 0 8" fill="none" stroke="#222" strokeWidth="0.1" />
+              <path d="M 8 0 L 0 0 0 8" fill="none" stroke="#2A2A2A" strokeWidth="0.1" />
             </pattern>
           </defs>
           <rect width="100" height="100" fill="url(#gridMap)" />
           {gridDots.map((dot, i) => (
-            <circle key={i} cx={dot.x} cy={dot.y} r="0.12" fill="#444" />
+            <circle key={i} cx={dot.x} cy={dot.y} r="0.12" fill="#555" />
           ))}
         </svg>
       </div>
 
       {/* 2. World Map Continents */}
-      <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full opacity-45">
-        <defs>
-          <linearGradient id="mapContinentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#0b0b0b" />
-            <stop offset="100%" stopColor="#1c1c1e" />
-          </linearGradient>
-        </defs>
+      <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full opacity-65">
         {worldPaths.map((path, i) => (
           <path 
             key={i} 
             d={path} 
-            fill="url(#mapContinentGrad)" 
-            stroke="rgba(255, 255, 255, 0.08)" 
+            fill="#171717" 
+            stroke="#2A2A2A" 
             strokeWidth="0.25"
-            className="transition-all duration-1000"
+            className="transition-all duration-500"
           />
         ))}
       </svg>
 
-      {/* 3. Scanning Radar Effect */}
-      <div className="absolute inset-0 pointer-events-none opacity-30">
-        <motion.div 
-          animate={{ 
-            rotate: 360,
-          }}
-          transition={{ 
-            duration: 12, 
-            repeat: Infinity, 
-            ease: "linear" 
-          }}
-          className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[conic-gradient(from_0deg,transparent_0deg,rgba(124,58,237,0.08)_90deg,rgba(124,58,237,0.3)_180deg,transparent_180deg)]"
-          style={{ transformOrigin: 'center center' }}
-        />
-      </div>
-
-      {/* 4. Target Node (HQ) */}
-      <div className="absolute top-[40%] left-[25%] -translate-x-1/2 -translate-y-1/2 w-8 h-8 z-10">
-        <div className={`absolute inset-0 rounded-full animate-ping opacity-15 ${isMitigating ? 'bg-neon-green' : 'bg-neon-purple'}`}></div>
-        <div className={`absolute inset-0 rounded-full blur-md opacity-35 ${isMitigating ? 'bg-neon-green' : 'bg-neon-purple'}`}></div>
-        <div className={`absolute inset-0 rounded-full border border-white/10 flex items-center justify-center bg-[#050505]/90 shadow-lg ${isMitigating ? 'shadow-neon-green/20' : 'shadow-neon-purple/20'}`}>
-          <Shield size={10} className={isMitigating ? 'text-neon-green' : 'text-neon-purple'} />
+      {/* 3. Target Node (HQ) - Clean dot indicator without neon shadow */}
+      <div className="absolute top-[40%] left-[25%] -translate-x-1/2 -translate-y-1/2 w-6 h-6 z-10">
+        <div className={`absolute inset-0 rounded-full border border-[#2A2A2A] flex items-center justify-center bg-[#1E1E1E] shadow-sm`}>
+          <Shield size={8} className={isMitigating ? 'text-[#16A34A]' : 'text-[#4F46E5]'} />
         </div>
       </div>
 
-      {/* 5. Attack Visualizations */}
+      {/* 4. Attack Visualizations */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 100 100">
-        <defs>
-          {threats.map((threat) => (
-            <linearGradient key={`threat-grad-${threat.id}`} id={`threat-grad-${threat.id}`} x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="transparent" />
-              <stop offset="50%" stopColor={threat.severity === 'Critical' ? '#ef4444' : '#7C3AED'} stopOpacity="0.8" />
-              <stop offset="100%" stopColor={threat.severity === 'Critical' ? '#ef4444' : '#7C3AED'} />
-            </linearGradient>
-          ))}
-        </defs>
         <AnimatePresence>
           {threats.map((threat) => {
             // Coordinate mapping (HQ is at 25, 40)
@@ -110,16 +77,17 @@ const ThreatMapComponent = ({ threats, isMitigating }) => {
             const hqY = 40;
             const x = ((threat.from.lng + 180) / 360) * 100;
             const y = ((90 - threat.from.lat) / 180) * 100;
+            const isCritical = threat.severity === 'Critical';
             
             return (
               <g key={threat.id}>
                 {/* Attacker Node Ripple */}
                 <motion.circle
                   initial={{ r: 0, opacity: 0 }}
-                  animate={{ r: 3, opacity: [0, 0.4, 0] }}
+                  animate={{ r: 2.5, opacity: [0, 0.3, 0] }}
                   transition={{ duration: 2.5, repeat: Infinity }}
                   cx={x} cy={y}
-                  fill={threat.severity === 'Critical' ? '#ef4444' : '#7C3AED'}
+                  fill={isCritical ? '#DC2626' : '#4F46E5'}
                 />
 
                 {/* Attacker Node */}
@@ -127,30 +95,29 @@ const ThreatMapComponent = ({ threats, isMitigating }) => {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
-                  cx={x} cy={y} r="0.7"
-                  fill={threat.severity === 'Critical' ? '#ef4444' : '#7C3AED'}
+                  cx={x} cy={y} r="0.6"
+                  fill={isCritical ? '#DC2626' : '#4F46E5'}
                 />
                 
-                {/* Attack Path Arc */}
+                {/* Attack Path Arc - clean gray vectors */}
                 <motion.path
                   initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: isMitigating ? 0.15 : 0.5 }}
+                  animate={{ pathLength: 1, opacity: isMitigating ? 0.1 : 0.4 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 2.0, ease: "easeInOut" }}
+                  transition={{ duration: 1.5, ease: "easeInOut" }}
                   d={`M ${x} ${y} Q ${(x + hqX) / 2} ${(y + hqY) / 2 - 15} ${hqX} ${hqY}`}
-                  stroke={`url(#threat-grad-${threat.id})`}
-                  strokeWidth="0.35"
+                  stroke={isCritical ? '#DC2626' : '#4F46E5'}
+                  strokeWidth="0.25"
                   fill="none"
                 />
 
-                {/* Particle Animation (Packet) */}
-                <motion.circle r="0.35" fill="white">
+                {/* Particle Animation (Packet) - minimal white dot */}
+                <motion.circle r="0.25" fill="#FAFAFA">
                   <animateMotion 
-                    dur="2.5s" 
+                    dur="3s" 
                     repeatCount="indefinite" 
                     path={`M ${x} ${y} Q ${(x + hqX) / 2} ${(y + hqY) / 2 - 15} ${hqX} ${hqY}`} 
                   />
-                  <div className="blur-sm bg-white/60 w-full h-full rounded-full" />
                 </motion.circle>
               </g>
             );
@@ -158,73 +125,65 @@ const ThreatMapComponent = ({ threats, isMitigating }) => {
         </AnimatePresence>
       </svg>
 
-      {/* 6. Threat Intel Overlay (Real-time feed) */}
-      <div className="absolute top-4 right-4 w-48 bg-[#0b0b0b]/80 backdrop-blur-md border border-white/5 rounded-xl p-3 shadow-2xl pointer-events-none z-20">
-        <div className="flex items-center gap-2 mb-3 border-b border-white/5 pb-2">
-          <Activity size={10} className="text-neon-purple animate-pulse" />
-          <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest font-mono">Real-time Feed</span>
+      {/* 5. Threat Intel Overlay (Real-time feed) */}
+      <div className="absolute top-4 right-4 w-44 bg-[#171717] border border-[#2A2A2A] rounded-lg p-3 shadow-lg pointer-events-none z-20">
+        <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-[#2A2A2A]">
+          <Activity size={10} className="text-[#4F46E5]" />
+          <span className="text-[9px] font-bold text-[#FAFAFA] uppercase tracking-wider">Telemetry Logs</span>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {threats.slice(-3).reverse().map((threat) => (
             <motion.div 
               key={threat.id}
-              initial={{ opacity: 0, x: 15 }}
+              initial={{ opacity: 0, x: 5 }}
               animate={{ opacity: 1, x: 0 }}
               className="flex flex-col gap-0.5"
             >
-              <div className="flex items-center justify-between">
-                <span className={`text-[8px] font-extrabold uppercase font-mono ${threat.severity === 'Critical' ? 'text-neon-red' : 'text-neon-purple'}`}>
-                  {threat.type?.split(' ')[0] || 'THREAT'}
+              <div className="flex items-center justify-between text-[8px]">
+                <span className={`font-semibold uppercase ${threat.severity === 'Critical' ? 'text-[#DC2626]' : 'text-[#4F46E5]'}`}>
+                  {threat.type?.split(' ')[0] || 'INTRUSION'}
                 </span>
-                <span className="text-[7px] text-slate-500 font-mono">
+                <span className="text-[#A3A3A3]">
                   {threat.from.country}
                 </span>
               </div>
-              <div className="text-[7px] text-slate-400 font-mono truncate">
+              <div className="text-[8px] text-[#A3A3A3]/65 font-mono truncate">
                 {threat.from.ip}
               </div>
             </motion.div>
           ))}
           {threats.length === 0 && (
-            <div className="text-[8px] text-slate-600 italic text-center py-2 font-mono">
-              Awaiting payload...
+            <div className="text-[8px] text-[#A3A3A3] italic text-center py-2">
+              Monitoring vectors...
             </div>
           )}
         </div>
       </div>
 
-      {/* 7. Map Status Legend */}
-      <div className="absolute bottom-4 left-4 flex flex-col gap-2 z-20">
-        <div className="flex items-center gap-3 bg-[#0b0b0b]/80 backdrop-blur-md border border-white/5 px-3 py-1.5 rounded-full shadow-lg">
+      {/* 6. Map Status Legend */}
+      <div className="absolute bottom-4 left-4 flex flex-col gap-1.5 z-20">
+        <div className="flex items-center gap-2.5 bg-[#171717] border border-[#2A2A2A] px-2.5 py-1.5 rounded-lg shadow-md">
           <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 bg-neon-purple rounded-full shadow-[0_0_5px_#7C3AED] animate-pulse"></div>
-            <span className="text-[8px] text-slate-300 font-bold tracking-tight uppercase font-mono">HQ_NODE_UP</span>
+            <div className="w-1.5 h-1.5 bg-[#4F46E5] rounded-full"></div>
+            <span className="text-[8px] text-[#FAFAFA] font-bold tracking-wider">SYS_UP</span>
           </div>
-          <div className="w-px h-3 bg-white/5"></div>
+          <div className="w-px h-3 bg-[#2A2A2A]"></div>
           <div className="flex items-center gap-1.5">
-            <span className="text-[8px] text-slate-500 font-mono">SENSORS:</span>
-            <span className="text-[8px] text-neon-green font-mono font-bold">ACTIVE</span>
+            <span className="text-[8px] text-[#A3A3A3]">NODES:</span>
+            <span className="text-[8px] text-[#16A34A] font-bold">ONLINE</span>
           </div>
         </div>
         
         {isMitigating && (
           <motion.div 
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 bg-neon-green/10 border border-neon-green/30 px-3 py-1 rounded-full text-neon-green shadow-lg"
+            className="flex items-center gap-1.5 bg-[#16A34A]/5 border border-[#16A34A]/25 px-2.5 py-1 rounded-lg text-[#16A34A] shadow-md"
           >
             <Shield size={10} />
-            <span className="text-[8px] font-bold uppercase tracking-wider font-mono">Mitigation Lockdown Engaged</span>
+            <span className="text-[8px] font-bold uppercase tracking-wider">Mitigation Shield Active</span>
           </motion.div>
         )}
-      </div>
-
-      {/* 8. Corner Technical Details */}
-      <div className="absolute top-4 left-4 pointer-events-none opacity-30 z-20">
-        <div className="flex flex-col gap-0.5 font-mono text-[7px] text-slate-500">
-          <div>SYS: INTRUSION-GRID-V4</div>
-          <div>LOC: 40.7128° N, 74.0060° W</div>
-        </div>
       </div>
     </div>
   );

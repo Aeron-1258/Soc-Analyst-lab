@@ -11,46 +11,46 @@ import {
 
 const TrafficChart = ({ data }) => {
   return (
-    <div className="h-[250px] w-full font-mono text-[10px]">
+    <div className="h-[240px] w-full font-sans text-[10px] text-[#A3A3A3]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={data}>
           <defs>
             <linearGradient id="colorIn" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.25}/>
-              <stop offset="95%" stopColor="#7C3AED" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.15}/>
+              <stop offset="95%" stopColor="#4F46E5" stopOpacity={0}/>
             </linearGradient>
             <linearGradient id="colorOut" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.25}/>
-              <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#A3A3A3" stopOpacity={0.1}/>
+              <stop offset="95%" stopColor="#A3A3A3" stopOpacity={0}/>
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" vertical={false} />
           <XAxis 
             dataKey="timestamp" 
             hide 
           />
           <YAxis 
-            stroke="#475569" 
-            fontSize={10} 
+            stroke="#64748B" 
+            fontSize={9} 
             tickLine={false} 
             axisLine={false} 
             tickFormatter={(value) => `${value}Mb`}
           />
           <Tooltip 
             contentStyle={{ 
-              backgroundColor: '#0b0b0b', 
-              borderColor: 'rgba(255,255,255,0.05)', 
-              borderRadius: '12px',
+              backgroundColor: '#171717', 
+              borderColor: '#2A2A2A', 
+              borderRadius: '8px',
               fontSize: '11px',
-              color: '#fff',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.8)'
+              color: '#FAFAFA',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
             }}
-            itemStyle={{ color: '#fff' }}
+            itemStyle={{ color: '#FAFAFA' }}
           />
           <Area 
             type="monotone" 
             dataKey="incoming" 
-            stroke="#7C3AED" 
+            stroke="#4F46E5" 
             fillOpacity={1} 
             fill="url(#colorIn)" 
             strokeWidth={1.5}
@@ -59,7 +59,7 @@ const TrafficChart = ({ data }) => {
           <Area 
             type="monotone" 
             dataKey="outgoing" 
-            stroke="#3B82F6" 
+            stroke="#A3A3A3" 
             fillOpacity={1} 
             fill="url(#colorOut)" 
             strokeWidth={1.5}

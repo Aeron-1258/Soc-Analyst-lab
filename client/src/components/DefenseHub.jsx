@@ -8,124 +8,121 @@ const DefenseHub = () => {
   const { isConnected, simulateAttack, simulateCompromise, simulatePhishing, isMitigating } = useSocket();
 
   return (
-    <div className="glass-panel p-6 border border-white/5 bg-[#0b0b0b]/60 relative overflow-hidden">
-      {/* Top ambient light line */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-widest font-mono">
-          <Shield className="text-neon-purple" size={16} /> Active Defense Hub
+    <div className="glass-panel p-5 border border-[#2A2A2A] bg-[#171717] relative overflow-hidden font-sans">
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="text-xs font-bold text-[#FAFAFA] flex items-center gap-2 uppercase tracking-wider">
+          <Shield className="text-[#4F46E5]" size={14} /> Active Mitigation Hub
         </h3>
         {isMitigating && (
-          <span className="text-[9px] bg-neon-green/10 text-neon-green border border-neon-green/20 px-2 py-0.5 rounded-full animate-pulse font-bold font-mono tracking-wider">
-            SHIELD_ENGAGED
+          <span className="text-[9px] bg-[#16A34A]/5 text-[#16A34A] border border-[#16A34A]/25 px-2 py-0.5 rounded-full font-bold">
+            LOCKDOWN_ENGAGED
           </span>
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3.5">
+      <div className="grid grid-cols-2 gap-3">
         {/* SQLi Simulation */}
         <motion.button
-          whileHover={{ scale: 1.015, borderColor: 'rgba(239, 68, 68, 0.3)' }}
-          whileTap={{ scale: 0.985 }}
+          whileHover={{ y: -0.5, borderColor: '#DC2626' }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => simulateAttack("💉 SQL INJECTION")}
-          className="flex flex-col items-center justify-center p-4 bg-[#050505]/40 border border-white/5 rounded-xl hover:bg-neon-red/[0.02] transition-all cursor-pointer text-center relative group"
+          className="flex flex-col items-center justify-center p-3.5 bg-[#1E1E1E] border border-[#2A2A2A] rounded-lg transition-all cursor-pointer text-center group"
         >
-          <Target className="text-neon-red mb-2 group-hover:scale-110 transition-transform" size={18} />
-          <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest font-mono">SQL Injection</span>
+          <Target className="text-[#DC2626] mb-1.5" size={16} />
+          <span className="text-[10px] font-semibold text-[#FAFAFA] tracking-tight">SQL Injection</span>
         </motion.button>
 
         {/* DDoS Simulation */}
         <motion.button
-          whileHover={{ scale: 1.015, borderColor: 'rgba(124, 58, 237, 0.3)' }}
-          whileTap={{ scale: 0.985 }}
+          whileHover={{ y: -0.5, borderColor: '#4F46E5' }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => simulateAttack("🌀 DDOS ATTACK")}
-          className="flex flex-col items-center justify-center p-4 bg-[#050505]/40 border border-white/5 rounded-xl hover:bg-neon-purple/[0.02] transition-all cursor-pointer text-center relative group"
+          className="flex flex-col items-center justify-center p-3.5 bg-[#1E1E1E] border border-[#2A2A2A] rounded-lg transition-all cursor-pointer text-center group"
         >
-          <Zap className="text-neon-purple mb-2 group-hover:scale-110 transition-transform" size={18} />
-          <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest font-mono">DDoS Attack</span>
+          <Zap className="text-[#4F46E5] mb-1.5" size={16} />
+          <span className="text-[10px] font-semibold text-[#FAFAFA] tracking-tight">DDoS Stream</span>
         </motion.button>
 
         {/* Malware Simulation */}
         <motion.button
-          whileHover={{ scale: 1.015, borderColor: 'rgba(245, 158, 11, 0.3)' }}
-          whileTap={{ scale: 0.985 }}
+          whileHover={{ y: -0.5, borderColor: '#F59E0B' }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => simulateAttack("🦠 MALWARE")}
-          className="flex flex-col items-center justify-center p-4 bg-[#050505]/40 border border-white/5 rounded-xl hover:bg-neon-yellow/[0.02] transition-all cursor-pointer text-center relative group"
+          className="flex flex-col items-center justify-center p-3.5 bg-[#1E1E1E] border border-[#2A2A2A] rounded-lg transition-all cursor-pointer text-center group"
         >
-          <AlertTriangle className="text-neon-yellow mb-2 group-hover:scale-110 transition-transform" size={18} />
-          <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest font-mono">Malware</span>
+          <AlertTriangle className="text-[#F59E0B] mb-1.5" size={16} />
+          <span className="text-[10px] font-semibold text-[#FAFAFA] tracking-tight">Malware</span>
         </motion.button>
 
         {/* Active Mitigation */}
         <motion.button
-          whileHover={!isMitigating ? { scale: 1.015, borderColor: 'rgba(16, 185, 129, 0.3)' } : {}}
-          whileTap={!isMitigating ? { scale: 0.985 } : {}}
+          whileHover={!isMitigating ? { y: -0.5, borderColor: '#16A34A' } : {}}
+          whileTap={!isMitigating ? { scale: 0.98 } : {}}
           onClick={() => simulateAttack("🛡️ MANUAL MITIGATION")}
           disabled={isMitigating}
-          className={`flex flex-col items-center justify-center p-4 rounded-xl transition-all cursor-pointer border text-center ${
+          className={`flex flex-col items-center justify-center p-3.5 rounded-lg transition-all cursor-pointer border text-center ${
             isMitigating 
-              ? 'bg-neon-green/5 border-neon-green/30 cursor-not-allowed text-neon-green' 
-              : 'bg-[#050505]/40 border-white/5 hover:bg-neon-green/[0.02]'
+              ? 'bg-[#16A34A]/5 border-[#16A34A]/30 cursor-not-allowed text-[#16A34A]' 
+              : 'bg-[#1E1E1E] border-[#2A2A2A] hover:bg-[#1E1E1E]'
           }`}
         >
           {isMitigating ? (
-            <ShieldCheck className="text-neon-green mb-2" size={18} />
+            <ShieldCheck className="text-[#16A34A] mb-1.5" size={16} />
           ) : (
-            <Shield className="text-slate-400 mb-2" size={18} />
+            <Shield className="text-[#A3A3A3] mb-1.5" size={16} />
           )}
-          <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest font-mono">
-            {isMitigating ? 'Mitigated' : 'Mitigate'}
+          <span className="text-[10px] font-semibold text-[#FAFAFA] tracking-tight">
+            {isMitigating ? 'Active Shield' : 'Mitigate'}
           </span>
         </motion.button>
       </div>
 
-      <div className="grid grid-cols-1 mt-4 gap-3">
+      <div className="grid grid-cols-1 mt-3 gap-2">
         <motion.button
-          whileHover={{ scale: 1.01, borderColor: 'rgba(239, 68, 68, 0.25)' }}
+          whileHover={{ y: -0.5 }}
           whileTap={{ scale: 0.99 }}
           onClick={() => {
             simulateCompromise();
-            toast.error("DETECTED: SUSPICIOUS LOGIN SEQUENCE", {
+            toast.error("ALERT: SUSPICIOUS AUTH SEQUENCE OBSERVED", {
               icon: '👤',
-              style: { border: '1px solid #ef4444', background: '#0b0b0b', color: '#fff' }
+              style: { border: '1px solid #DC2626', background: '#171717', color: '#FAFAFA' }
             });
           }}
-          className="flex items-center justify-center gap-3 p-3.5 bg-neon-red/5 border border-white/5 hover:border-neon-red/20 rounded-xl hover:bg-neon-red/[0.08] transition-all text-neon-red cursor-pointer group"
+          className="flex items-center justify-center gap-2 py-2 bg-[#DC2626]/5 border border-[#DC2626]/20 hover:bg-[#DC2626]/10 rounded-lg text-[#DC2626] font-semibold text-xs transition-all cursor-pointer"
         >
-          <Flame size={16} className="group-hover:scale-110 transition-transform" />
-          <span className="text-[10px] font-bold uppercase tracking-widest font-mono">Simulate Compromise</span>
+          <Flame size={14} />
+          <span>Simulate Account Takeover</span>
         </motion.button>
 
         <motion.button
-          whileHover={{ scale: 1.01, borderColor: 'rgba(59, 130, 246, 0.25)' }}
+          whileHover={{ y: -0.5 }}
           whileTap={{ scale: 0.99 }}
           onClick={() => {
             simulatePhishing();
-            toast.error("DETECTED: SUSPICIOUS EMAIL ACTIVITY", {
+            toast.error("ALERT: MALICIOUS EMAIL PATH INJECTED", {
               icon: '📧',
-              style: { border: '1px solid #ef4444', background: '#0b0b0b', color: '#fff' }
+              style: { border: '1px solid #DC2626', background: '#171717', color: '#FAFAFA' }
             });
           }}
-          className="flex items-center justify-center gap-3 p-3.5 bg-neon-blue/5 border border-white/5 hover:border-neon-blue/20 rounded-xl hover:bg-neon-blue/[0.08] transition-all text-neon-blue cursor-pointer group"
+          className="flex items-center justify-center gap-2 py-2 bg-[#4F46E5]/5 border border-[#4F46E5]/20 hover:bg-[#4F46E5]/10 rounded-lg text-[#4F46E5] font-semibold text-xs transition-all cursor-pointer"
         >
-          <Cpu size={16} className="group-hover:scale-110 transition-transform" />
-          <span className="text-[10px] font-bold uppercase tracking-widest font-mono">Simulate Phishing</span>
+          <Cpu size={14} />
+          <span>Simulate Phishing Vectors</span>
         </motion.button>
       </div>
 
-      <div className="mt-6 pt-6 border-t border-white/5">
-        <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
-          <span>SYSTEM INTEGRITY</span>
-          <span className={`font-bold ${isMitigating ? 'text-neon-green' : 'text-neon-purple'}`}>
+      <div className="mt-5 pt-4 border-t border-[#2A2A2A]">
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-[#A3A3A3] font-medium">System Health</span>
+          <span className={`font-semibold ${isMitigating ? 'text-[#16A34A]' : 'text-[#4F46E5]'}`}>
             {isMitigating ? '100% (SECURE)' : '94% (MONITORING)'}
           </span>
         </div>
-        <div className="w-full h-1 bg-[#050505] rounded-full mt-2.5 overflow-hidden">
+        <div className="w-full h-1 bg-[#0A0A0A] rounded-full mt-2 overflow-hidden">
           <motion.div 
             initial={{ width: '94%' }}
             animate={{ width: isMitigating ? '100%' : '94%' }}
-            className={`h-full ${isMitigating ? 'bg-neon-green shadow-neon-green' : 'bg-neon-purple shadow-neon-purple'} shadow-[0_0_8px]`}
+            className={`h-full ${isMitigating ? 'bg-[#16A34A]' : 'bg-[#4F46E5]'}`}
           />
         </div>
       </div>

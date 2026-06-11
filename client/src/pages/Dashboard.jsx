@@ -26,13 +26,13 @@ const Dashboard = () => {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
-      transition: { staggerChildren: 0.08 }
+      transition: { staggerChildren: 0.05 }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 15, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.5 } }
+    hidden: { y: 10, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.4, ease: 'easeOut' } }
   };
 
   return (
@@ -40,27 +40,27 @@ const Dashboard = () => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-6 relative"
+      className="space-y-6 relative font-sans text-[#A3A3A3]"
     >
       {/* Header bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-extrabold text-white flex items-center gap-2.5 tracking-tight font-sans">
-            <Activity className="text-neon-purple" size={20} /> SYSTEM OVERVIEW
+          <h2 className="text-xl font-semibold text-[#FAFAFA] flex items-center gap-2 tracking-tight font-display">
+            <Activity className="text-[#4F46E5]" size={18} /> System Overview
           </h2>
-          <p className="text-slate-400 text-xs md:text-sm font-medium mt-0.5">Real-time threat intelligence and network analysis</p>
+          <p className="text-xs text-[#A3A3A3] mt-0.5">Real-time telemetry, threat intelligence feeds, and active network throughput</p>
         </div>
         
         <div className="flex gap-2">
           {isConnected ? (
-            <span className="flex items-center gap-2 px-3 py-1.5 bg-[#0b0b0b] text-neon-green border border-neon-green/20 rounded-full text-[10px] md:text-xs font-bold font-mono shadow-[0_0_12px_rgba(16,185,129,0.1)]">
-              <span className="w-1.5 h-1.5 bg-neon-green rounded-full animate-pulse shadow-[0_0_6px_#10b981]"></span>
-              LIVE_UPLINK
+            <span className="flex items-center gap-2 px-3 py-1.5 bg-[#16A34A]/5 text-[#16A34A] border border-[#16A34A]/25 rounded-full text-xs font-semibold">
+              <span className="w-1.5 h-1.5 bg-[#16A34A] rounded-full animate-pulse"></span>
+              Live Uplink
             </span>
           ) : (
-            <span className="flex items-center gap-2 px-3 py-1.5 bg-[#0b0b0b] text-neon-purple border border-neon-purple/20 rounded-full text-[10px] md:text-xs font-bold font-mono shadow-[0_0_12px_rgba(124,58,237,0.1)]">
-              <span className="w-1.5 h-1.5 bg-neon-purple rounded-full animate-ping shadow-[0_0_6px_#7C3AED]"></span>
-              SIMULATION_MODE
+            <span className="flex items-center gap-2 px-3 py-1.5 bg-[#4F46E5]/5 text-[#4F46E5] border border-[#4F46E5]/25 rounded-full text-xs font-semibold">
+              <span className="w-1.5 h-1.5 bg-[#4F46E5] rounded-full"></span>
+              Simulation Mode
             </span>
           )}
         </div>
@@ -70,33 +70,27 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Threat Map */}
-        <motion.div variants={itemVariants} className="lg:col-span-2 glass-panel p-6 min-h-[420px] flex flex-col bg-[#0b0b0b]/60 border border-white/5 relative">
-          {/* Top ambient glow line */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-
+        <motion.div variants={itemVariants} className="lg:col-span-2 glass-panel p-5 min-h-[420px] flex flex-col bg-[#171717] border border-[#2A2A2A]">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-widest font-mono">
-              <Globe className="text-neon-cyan" size={16} /> Global Threat Map
+            <h3 className="text-xs font-bold text-[#FAFAFA] flex items-center gap-2 uppercase tracking-wider">
+              <Globe className="text-[#4F46E5]" size={14} /> Global Attack Activity
             </h3>
-            <span className="text-[9px] text-slate-500 font-mono tracking-wider">ACTIVE NODES: {threats.length}</span>
+            <span className="text-[10px] text-[#A3A3A3] font-mono">ACTIVE TARGETS: {threats.length}</span>
           </div>
           
-          <div className="flex-1 bg-[#050505]/40 rounded-2xl relative overflow-hidden border border-white/5 shadow-inner">
+          <div className="flex-1 bg-[#111111]/45 rounded-lg relative overflow-hidden border border-[#2A2A2A]">
              <ThreatMapComponent threats={filteredThreats} isMitigating={isMitigating} />
           </div>
         </motion.div>
 
         {/* Real-time Alerts */}
-        <motion.div variants={itemVariants} className="glass-panel p-6 flex flex-col h-[420px] bg-[#0b0b0b]/60 border border-white/5 relative">
-          {/* Top ambient glow line */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-
+        <motion.div variants={itemVariants} className="glass-panel p-5 flex flex-col h-[420px] bg-[#171717] border border-[#2A2A2A]">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-widest font-mono">
-              <ShieldAlert className="text-neon-red" size={16} /> Live Incidents
+            <h3 className="text-xs font-bold text-[#FAFAFA] flex items-center gap-2 uppercase tracking-wider">
+              <ShieldAlert className="text-[#DC2626]" size={14} /> Live Incidents Ticker
             </h3>
-            <button className="text-[9px] font-bold text-neon-purple uppercase tracking-widest font-mono hover:text-[#9D4EDD] transition-colors cursor-pointer">
-              View All
+            <button className="text-[10px] font-bold text-[#4F46E5] hover:text-[#3730A3] transition-colors cursor-pointer">
+              View Log
             </button>
           </div>
           <AlertList alerts={filteredAlerts.slice(0, 10)} />
@@ -115,20 +109,17 @@ const Dashboard = () => {
         </div>
 
         {/* Network Traffic */}
-        <motion.div variants={itemVariants} className="lg:col-span-3 glass-panel p-6 bg-[#0b0b0b]/60 border border-white/5 relative flex flex-col justify-between">
-          {/* Top ambient glow line */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-
+        <motion.div variants={itemVariants} className="lg:col-span-3 glass-panel p-5 bg-[#171717] border border-[#2A2A2A] flex flex-col justify-between">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-widest font-mono">
-              <Zap className="text-neon-purple" size={16} /> Network Throughput
+            <h3 className="text-xs font-bold text-[#FAFAFA] flex items-center gap-2 uppercase tracking-wider">
+              <Zap className="text-[#4F46E5]" size={14} /> Network Throughput
             </h3>
-            <div className="flex gap-4 text-[9px] font-bold uppercase font-mono">
-              <span className="flex items-center gap-1.5 text-neon-purple">
-                <span className="w-1.5 h-1.5 bg-neon-purple rounded-full shadow-[0_0_4px_#7C3AED]"></span> Inbound
+            <div className="flex gap-4 text-[10px] font-semibold uppercase">
+              <span className="flex items-center gap-1.5 text-[#4F46E5]">
+                <span className="w-1.5 h-1.5 bg-[#4F46E5] rounded-full"></span> Inbound
               </span>
-              <span className="flex items-center gap-1.5 text-neon-blue">
-                <span className="w-1.5 h-1.5 bg-neon-blue rounded-full shadow-[0_0_4px_#3b82f6]"></span> Outbound
+              <span className="flex items-center gap-1.5 text-[#A3A3A3]">
+                <span className="w-1.5 h-1.5 bg-[#A3A3A3] rounded-full"></span> Outbound
               </span>
             </div>
           </div>
@@ -140,35 +131,32 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Analytics Distribution */}
-        <motion.div variants={itemVariants} className="glass-panel p-6 bg-[#0b0b0b]/60 border border-white/5 relative">
-          {/* Top ambient glow line */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-
-          <h3 className="text-sm font-extrabold text-white mb-6 uppercase tracking-widest font-mono">Threat Severity Distribution</h3>
+        <motion.div variants={itemVariants} className="glass-panel p-5 bg-[#171717] border border-[#2A2A2A]">
+          <h3 className="text-xs font-bold text-[#FAFAFA] mb-6 uppercase tracking-wider">Threat Severity Distribution</h3>
           <div className="space-y-4">
             {['Critical', 'High', 'Medium', 'Low'].map((sev) => {
               const count = alerts.filter(a => a.severity === sev).length;
               const total = alerts.length || 1;
               const percentage = (count / total) * 100;
               const colorMap = {
-                Critical: 'bg-neon-red shadow-neon-red',
-                High: 'bg-neon-orange shadow-neon-orange',
-                Medium: 'bg-neon-yellow shadow-neon-yellow',
-                Low: 'bg-neon-green shadow-neon-green'
+                Critical: 'bg-[#DC2626]',
+                High: 'bg-[#EA580C]',
+                Medium: 'bg-[#F59E0B]',
+                Low: 'bg-[#16A34A]'
               };
               
               return (
-                <div key={sev} className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-mono">
-                    <span className="text-slate-400 font-bold uppercase tracking-wider">{sev}</span>
-                    <span className="text-white font-bold">{count}</span>
+                <div key={sev} className="space-y-1">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-[#A3A3A3] font-medium">{sev}</span>
+                    <span className="text-[#FAFAFA] font-semibold">{count}</span>
                   </div>
-                  <div className="w-full h-1 bg-[#050505] rounded-full overflow-hidden">
+                  <div className="w-full h-1 bg-[#0A0A0A] rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
                       animate={{ width: `${percentage}%` }}
-                      transition={{ duration: 0.8, ease: 'easeOut' }}
-                      className={`h-full ${colorMap[sev]} shadow-[0_0_8px]`}
+                      transition={{ duration: 0.6, ease: 'easeOut' }}
+                      className={`h-full ${colorMap[sev]}`}
                     />
                   </div>
                 </div>
@@ -178,30 +166,25 @@ const Dashboard = () => {
         </motion.div>
 
         {/* System Health / Status */}
-        <motion.div variants={itemVariants} className="glass-panel p-6 flex flex-col justify-center items-center gap-5 bg-[#0b0b0b]/60 border border-white/5 relative min-h-[200px]">
-          {/* Top ambient glow line */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-
+        <motion.div variants={itemVariants} className="glass-panel p-5 flex flex-col justify-center items-center gap-5 bg-[#171717] border border-[#2A2A2A] min-h-[200px]">
            <div className="relative">
-              <svg className="w-32 h-32 rotate-[-90deg]">
-                <circle cx="64" cy="64" r="54" stroke="rgba(255,255,255,0.03)" strokeWidth="6" fill="transparent" />
+              <svg className="w-28 h-28 rotate-[-90deg]">
+                <circle cx="56" cy="56" r="46" stroke="#2A2A2A" strokeWidth="4" fill="transparent" />
                 <motion.circle 
-                  cx="64" cy="64" r="54" stroke="#7C3AED" strokeWidth="6" fill="transparent" 
-                  className="text-neon-purple"
-                  strokeDasharray="339.29"
-                  initial={{ strokeDashoffset: 339.29 }}
-                  animate={{ strokeDashoffset: 33.929 }} // 90%
-                  transition={{ duration: 1.2, ease: 'easeOut' }}
+                  cx="56" cy="56" r="46" stroke="#4F46E5" strokeWidth="4" fill="transparent" 
+                  strokeDasharray="289.02"
+                  initial={{ strokeDashoffset: 289.02 }}
+                  animate={{ strokeDashoffset: 28.902 }} // 90%
+                  transition={{ duration: 0.8, ease: 'easeOut' }}
                   strokeLinecap="round"
-                  style={{ filter: 'drop-shadow(0 0 4px #7C3AED)' }}
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-black text-white font-mono tracking-tighter">90%</span>
-                <span className="text-[8px] text-slate-500 font-bold uppercase font-mono tracking-widest">Health</span>
+                <span className="text-2xl font-bold text-[#FAFAFA]">90%</span>
+                <span className="text-[9px] text-[#A3A3A3] font-semibold uppercase tracking-wider">Health</span>
               </div>
            </div>
-           <p className="text-xs text-slate-400 font-mono tracking-wide uppercase">All services operating within normal limits</p>
+           <p className="text-xs text-[#A3A3A3] font-medium text-center">All operational nodes working within normal parameters</p>
         </motion.div>
       </div>
     </motion.div>

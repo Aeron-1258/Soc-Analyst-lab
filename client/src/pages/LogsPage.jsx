@@ -47,61 +47,59 @@ const LogsPage = () => {
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="space-y-6"
+      className="space-y-6 font-sans text-[#A3A3A3]"
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-extrabold text-white flex items-center gap-2.5 tracking-tight font-sans">
-            <FileText className="text-neon-purple" size={20} /> SYSTEM LOGS
+          <h2 className="text-xl font-semibold text-[#FAFAFA] flex items-center gap-2 tracking-tight font-display">
+            <FileText className="text-[#4F46E5]" size={18} /> System Audit Logs
           </h2>
-          <p className="text-slate-400 text-xs md:text-sm font-medium mt-0.5">Raw security events and audit trails</p>
+          <p className="text-xs text-[#A3A3A3] mt-0.5">Raw system audit logs, connection handshakes, and diagnostic logs</p>
         </div>
         
-        <div className="flex items-center gap-3">
-          <button className="p-2.5 bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 hover:border-white/10 text-slate-300 rounded-xl transition-all cursor-pointer">
-            <Filter size={16} />
+        <div className="flex items-center gap-2">
+          <button className="p-2 bg-[#1E1E1E] hover:bg-[#2A2A2A] border border-[#2A2A2A] text-slate-200 rounded-lg transition-all cursor-pointer">
+            <Filter size={14} />
           </button>
           <button 
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-neon-purple to-neon-blue hover:from-neon-purple hover:to-[#5B21B6] text-white rounded-xl text-xs font-bold font-mono tracking-wider shadow-[0_0_12px_rgba(124,58,237,0.2)] transition-all cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-[#1E1E1E] hover:bg-[#2A2A2A] border border-[#2A2A2A] text-slate-200 hover:text-white rounded-lg text-xs font-semibold tracking-wide transition-all cursor-pointer shadow-sm"
           >
-            <Download size={14} /> EXPORT_CSV
+            <Download size={14} /> Export CSV
           </button>
         </div>
       </div>
 
-      {/* Terminal Glass Container */}
-      <div className="glass-panel overflow-hidden border border-white/5 bg-[#0b0b0b]/60 relative">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-
-        <div className="bg-[#050505]/60 p-4 border-b border-white/5 flex justify-between items-center">
-          <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">Live Audit Stream</span>
-          <span className="text-[9px] text-neon-green font-bold font-mono flex items-center gap-1.5">
-            <span className="w-1 h-1 bg-neon-green rounded-full animate-pulse shadow-[0_0_4px_#10b981]"></span>
-            SECURE_LINK_UP
+      {/* Terminal Container */}
+      <div className="glass-panel overflow-hidden border border-[#2A2A2A] bg-[#171717] relative">
+        <div className="bg-[#111111] px-5 py-3 border-b border-[#2A2A2A] flex justify-between items-center">
+          <span className="text-[10px] font-bold text-[#A3A3A3] uppercase tracking-wider">Operational Audit Stream</span>
+          <span className="text-[10px] text-[#16A34A] font-semibold flex items-center gap-1.5 font-mono">
+            <span className="w-1.5 h-1.5 bg-[#16A34A] rounded-full animate-pulse"></span>
+            ACTIVE_STREAM
           </span>
         </div>
         
-        <div className="max-h-[600px] overflow-y-auto font-mono text-[11px] p-5 space-y-2.5 scrollbar-hide bg-[#050505]/20">
+        <div className="max-h-[600px] overflow-y-auto p-5 space-y-3 scrollbar-hide bg-[#171717]/30">
           {filteredLogs.map((log) => (
-            <div key={log.id} className="flex gap-4 items-start group hover:bg-white/[0.02] p-1.5 rounded-lg transition-colors text-slate-400">
-              <span className="text-slate-600 shrink-0 font-medium">[{new Date(log.timestamp).toISOString()}]</span>
-              <span className={`shrink-0 font-extrabold uppercase text-[9px] px-1.5 py-0.5 rounded border ${
-                log.severity === 'Critical' ? 'bg-neon-red/10 border-neon-red/20 text-neon-red' : 
-                log.severity === 'High' ? 'bg-neon-orange/10 border-neon-orange/20 text-neon-orange' : 'bg-neon-purple/10 border-neon-purple/20 text-neon-purple'
+            <div key={log.id} className="flex gap-4 items-start group hover:bg-[#1E1E1E]/40 p-2 rounded-lg transition-colors text-[#A3A3A3] text-xs">
+              <span className="text-[#64748B] shrink-0 font-mono">[{new Date(log.timestamp).toISOString()}]</span>
+              <span className={`shrink-0 font-bold uppercase text-[8px] px-2 py-0.5 rounded border ${
+                log.severity === 'Critical' ? 'bg-[#DC2626]/5 border-[#DC2626]/20 text-[#DC2626]' : 
+                log.severity === 'High' ? 'bg-[#EA580C]/5 border-[#EA580C]/20 text-[#EA580C]' : 'bg-[#4F46E5]/5 border-[#4F46E5]/20 text-[#4F46E5]'
               }`}>
                 {log.severity}
               </span>
-              <span className="text-slate-300 leading-relaxed">
-                Event: <span className="text-white font-bold">{log.type}</span> from <span className="text-neon-cyan font-bold">{log.sourceIP}</span> 
-                target <span className="text-slate-500 font-semibold">{log.targetIP}</span>
+              <span className="text-slate-300 leading-normal flex-1">
+                Event: <span className="text-[#FAFAFA] font-semibold">{log.type}</span> from <span className="text-[#4F46E5] font-semibold font-mono">{log.sourceIP}</span> 
+                target <span className="text-[#A3A3A3] font-mono">{log.targetIP}</span>
               </span>
-              <span className="ml-auto text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity font-mono text-[9px]">ID: {log.id}</span>
+              <span className="text-[9px] text-[#64748B] opacity-0 group-hover:opacity-100 transition-opacity font-mono">ID: {log.id.slice(0, 8)}</span>
             </div>
           ))}
           {filteredLogs.length === 0 && (
-            <div className="text-center py-16 text-slate-600 italic text-xs font-mono">
-              NO STREAM LOGS RECORDED IN THIS SESSION
+            <div className="text-center py-16 text-[#64748B] italic text-xs">
+              No audit logs captured in this session
             </div>
           )}
         </div>

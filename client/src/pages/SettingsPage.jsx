@@ -11,18 +11,18 @@ const SettingsPage = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   const tabs = [
-    { id: 'Profile', icon: <User size={16} /> },
-    { id: 'Notifications', icon: <Bell size={16} /> },
-    { id: 'Security', icon: <Shield size={16} /> },
-    { id: 'Appearance', icon: <Palette size={16} /> },
-    { id: 'Preferences', icon: <Sliders size={16} /> },
+    { id: 'Profile', icon: <User size={14} /> },
+    { id: 'Notifications', icon: <Bell size={14} /> },
+    { id: 'Security', icon: <Shield size={14} /> },
+    { id: 'Appearance', icon: <Palette size={14} /> },
+    { id: 'Preferences', icon: <Sliders size={14} /> },
   ];
 
   const handleToggle = (key) => {
     updateSettings({ [key]: !settings[key] });
-    toast.success(`${key} setting updated`, {
+    toast.success(`Setting changed successfully`, {
        duration: 1500,
-       style: { fontSize: '11px', background: '#0b0b0b', color: '#fff', border: '1px solid rgba(255,255,255,0.05)' }
+       style: { fontSize: '12px', background: '#171717', color: '#FAFAFA', border: '1px solid #2A2A2A' }
     });
   };
 
@@ -31,35 +31,35 @@ const SettingsPage = () => {
     setTimeout(() => {
       updateSettings({ displayName: localName });
       setIsSaving(false);
-      toast.success("Profile changes saved successfully!", {
-        style: { background: '#0b0b0b', color: '#fff', border: '1px solid #10b981' }
+      toast.success("Profile saved successfully!", {
+        style: { background: '#171717', color: '#FAFAFA', border: '1px solid #16A34A' }
       });
-    }, 1000);
+    }, 800);
   };
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-4xl mx-auto space-y-6"
+      className="max-w-4xl mx-auto space-y-6 font-sans text-[#A3A3A3]"
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-xl md:text-2xl font-extrabold text-white uppercase tracking-tight font-sans">
-          SETTINGS
+        <h2 className="text-xl font-semibold text-[#FAFAFA] tracking-tight font-display">
+          System Settings
         </h2>
       </div>
 
       <div className="flex flex-col md:flex-row gap-6 items-start">
-        {/* Sidebar Tabs (macOS preference style) */}
-        <div className="w-full md:w-52 space-y-1.5 shrink-0">
+        {/* Sidebar Tabs */}
+        <div className="w-full md:w-48 space-y-1 shrink-0">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer font-semibold uppercase tracking-wider font-mono text-[10px] ${
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all cursor-pointer text-xs font-semibold ${
                 activeTab === tab.id 
-                  ? 'bg-gradient-to-r from-neon-purple/15 to-neon-blue/5 text-white border-l-2 border-neon-purple shadow-[0_0_15px_rgba(124,58,237,0.1)]' 
-                  : 'text-slate-400 hover:text-white hover:bg-white/[0.02] border-l-2 border-transparent'
+                  ? 'bg-[#1E1E1E] text-[#FAFAFA] border border-[#2A2A2A] shadow-sm' 
+                  : 'text-[#A3A3A3] hover:text-[#FAFAFA] hover:bg-[#171717]'
               }`}
             >
               {tab.icon}
@@ -71,37 +71,35 @@ const SettingsPage = () => {
         {/* Content Area */}
         <div className="flex-1 w-full space-y-6">
           {activeTab === 'Appearance' && (
-            <div className="glass-panel p-6 md:p-8 space-y-8 border border-white/5 bg-[#0b0b0b]/60 relative">
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-              
+            <div className="glass-panel p-6 md:p-8 space-y-6 border border-[#2A2A2A] bg-[#171717] relative">
               <div>
-                <h3 className="text-sm font-extrabold text-white uppercase tracking-widest font-mono mb-1">Appearance Settings</h3>
-                <p className="text-xs text-slate-500 font-sans">Manage colors, backgrounds, and display details</p>
+                <h3 className="text-sm font-bold text-[#FAFAFA] mb-1">Appearance Settings</h3>
+                <p className="text-xs text-[#A3A3A3]">Manage application themes, backgrounds, and display parameters</p>
               </div>
               
-              <div className="space-y-6 divide-y divide-white/5">
+              <div className="space-y-5 divide-y divide-[#2A2A2A]">
                 {[
-                  { id: 'darkMode', label: 'Dark luxury theme', desc: 'Enable black-graphite UI overlay for night analysis operations' },
-                  { id: 'neonEffects', label: 'Neon borders', desc: 'Activate purple/blue glowing highlights across system panels' },
-                  { id: 'gridBackground', label: 'Network grid matrix', desc: 'Show interactive background mesh and particle animations' }
+                  { id: 'darkMode', label: 'Dark slate console mode', desc: 'Maintain clean contrast ratios for low-light environments' },
+                  { id: 'neonEffects', label: 'Dashboard color indicators', desc: 'Render security telemetry categories in functional colors' },
+                  { id: 'gridBackground', label: 'Telemetry backgrounds', desc: 'Enable subtle background grids on visual panels' }
                 ].map((item, idx) => (
-                  <div key={item.id} className={`flex items-center justify-between group ${idx > 0 ? 'pt-6' : ''}`}>
+                  <div key={item.id} className={`flex items-center justify-between group ${idx > 0 ? 'pt-5' : ''}`}>
                     <div>
-                      <p className="text-white text-xs font-bold font-mono uppercase tracking-wide">{item.label}</p>
-                      <p className="text-xs text-slate-500 mt-1 font-sans">{item.desc}</p>
+                      <p className="text-[#FAFAFA] text-xs font-semibold">{item.label}</p>
+                      <p className="text-xs text-[#A3A3A3] mt-1">{item.desc}</p>
                     </div>
                     
-                    {/* iOS style toggle slider */}
+                    {/* Toggle slider */}
                     <button
                       onClick={() => handleToggle(item.id)}
-                      className={`w-11 h-6 rounded-full relative transition-all duration-300 cursor-pointer ${
-                        settings[item.id] ? 'bg-neon-purple shadow-[0_0_10px_rgba(124,58,237,0.3)]' : 'bg-white/10'
+                      className={`w-10 h-5.5 rounded-full relative transition-all duration-200 cursor-pointer ${
+                        settings[item.id] ? 'bg-[#4F46E5]' : 'bg-[#2A2A2A]'
                       }`}
                     >
                       <motion.div 
-                        animate={{ x: settings[item.id] ? 22 : 4 }}
+                        animate={{ x: settings[item.id] ? 20 : 3 }}
                         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                        className="absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm"
+                        className="absolute top-0.5 w-4.5 h-4.5 bg-white rounded-full shadow-sm"
                       />
                     </button>
                   </div>
@@ -111,36 +109,34 @@ const SettingsPage = () => {
           )}
 
           {activeTab === 'Notifications' && (
-            <div className="glass-panel p-6 md:p-8 space-y-8 border border-white/5 bg-[#0b0b0b]/60 relative">
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-              
+            <div className="glass-panel p-6 md:p-8 space-y-6 border border-[#2A2A2A] bg-[#171717] relative">
               <div>
-                <h3 className="text-sm font-extrabold text-white uppercase tracking-widest font-mono mb-1">Incident Alerts</h3>
-                <p className="text-xs text-slate-500 font-sans">Configure dispatch rules for high-priority breaches</p>
+                <h3 className="text-sm font-bold text-[#FAFAFA] mb-1">Incident Dispatching</h3>
+                <p className="text-xs text-[#A3A3A3]">Configure routing triggers for high-severity alerts</p>
               </div>
               
-              <div className="space-y-6 divide-y divide-white/5">
+              <div className="space-y-5 divide-y divide-[#2A2A2A]">
                 {[
-                  { id: 'emailNotifications', label: 'Critical Email Alerts', desc: 'Send high-severity incident reports to your work email' },
-                  { id: 'desktopAlerts', label: 'Desktop Notifications', desc: 'Show browser-level alerts even when tab is inactive' },
-                  { id: 'soundEffects', label: 'Audio Warnings', desc: 'Play audible siren for critical system breaches' }
+                  { id: 'emailNotifications', label: 'Email dispatcher triggers', desc: 'Send summaries for high-priority security breaches' },
+                  { id: 'desktopAlerts', label: 'Desktop banner flags', desc: 'Trigger banner warnings for local alerts' },
+                  { id: 'soundEffects', label: 'Operational sirens', desc: 'Play brief audio indicators for incoming events' }
                 ].map((item, idx) => (
-                  <div key={item.id} className={`flex items-center justify-between group ${idx > 0 ? 'pt-6' : ''}`}>
+                  <div key={item.id} className={`flex items-center justify-between group ${idx > 0 ? 'pt-5' : ''}`}>
                     <div>
-                      <p className="text-white text-xs font-bold font-mono uppercase tracking-wide">{item.label}</p>
-                      <p className="text-xs text-slate-500 mt-1 font-sans">{item.desc}</p>
+                      <p className="text-[#FAFAFA] text-xs font-semibold">{item.label}</p>
+                      <p className="text-xs text-[#A3A3A3] mt-1">{item.desc}</p>
                     </div>
                     
                     <button
                       onClick={() => handleToggle(item.id)}
-                      className={`w-11 h-6 rounded-full relative transition-all duration-300 cursor-pointer ${
-                        settings[item.id] ? 'bg-neon-purple shadow-[0_0_10px_rgba(124,58,237,0.3)]' : 'bg-white/10'
+                      className={`w-10 h-5.5 rounded-full relative transition-all duration-200 cursor-pointer ${
+                        settings[item.id] ? 'bg-[#4F46E5]' : 'bg-[#2A2A2A]'
                       }`}
                     >
                       <motion.div 
-                        animate={{ x: settings[item.id] ? 22 : 4 }}
+                        animate={{ x: settings[item.id] ? 20 : 3 }}
                         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                        className="absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm"
+                        className="absolute top-0.5 w-4.5 h-4.5 bg-white rounded-full shadow-sm"
                       />
                     </button>
                   </div>
@@ -150,49 +146,47 @@ const SettingsPage = () => {
           )}
 
           {activeTab === 'Security' && (
-            <div className="glass-panel p-6 md:p-8 space-y-8 border border-white/5 bg-[#0b0b0b]/60 relative">
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-              
+            <div className="glass-panel p-6 md:p-8 space-y-6 border border-[#2A2A2A] bg-[#171717] relative">
               <div>
-                <h3 className="text-sm font-extrabold text-white uppercase tracking-widest font-mono mb-1">Access Control</h3>
-                <p className="text-xs text-slate-500 font-sans">Manage authentication layers and terminal sessions</p>
+                <h3 className="text-sm font-bold text-[#FAFAFA] mb-1">Identity & Authentication</h3>
+                <p className="text-xs text-[#A3A3A3]">Manage authorization constraints and active analyst keys</p>
               </div>
               
-              <div className="space-y-6 divide-y divide-white/5">
+              <div className="space-y-5 divide-y divide-[#2A2A2A]">
                 {[
-                  { id: 'mfaEnabled', label: 'Multi-Factor Auth (MFA)', desc: 'Require security token for analyst authentication' },
-                  { id: 'sessionLock', label: 'Auto-Session Lock', desc: 'Lock terminal after 15 minutes of inactivity' }
+                  { id: 'mfaEnabled', label: 'Multi-Factor Validation (MFA)', desc: 'Enforce MFA authentication validation on credentials connection' },
+                  { id: 'sessionLock', label: 'Terminal inactivity locking', desc: 'Secure operational views after 15 minutes of inactivity' }
                 ].map((item, idx) => (
-                  <div key={item.id} className={`flex items-center justify-between group ${idx > 0 ? 'pt-6' : ''}`}>
+                  <div key={item.id} className={`flex items-center justify-between group ${idx > 0 ? 'pt-5' : ''}`}>
                     <div>
-                      <p className="text-white text-xs font-bold font-mono uppercase tracking-wide">{item.label}</p>
-                      <p className="text-xs text-slate-500 mt-1 font-sans">{item.desc}</p>
+                      <p className="text-[#FAFAFA] text-xs font-semibold">{item.label}</p>
+                      <p className="text-xs text-[#A3A3A3] mt-1">{item.desc}</p>
                     </div>
                     <button
                       onClick={() => handleToggle(item.id)}
-                      className={`w-11 h-6 rounded-full relative transition-all duration-300 cursor-pointer ${
-                        settings[item.id] ? 'bg-neon-purple shadow-[0_0_10px_rgba(124,58,237,0.3)]' : 'bg-white/10'
+                      className={`w-10 h-5.5 rounded-full relative transition-all duration-200 cursor-pointer ${
+                        settings[item.id] ? 'bg-[#4F46E5]' : 'bg-[#2A2A2A]'
                       }`}
                     >
                       <motion.div 
-                        animate={{ x: settings[item.id] ? 22 : 4 }}
+                        animate={{ x: settings[item.id] ? 20 : 3 }}
                         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                        className="absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm"
+                        className="absolute top-0.5 w-4.5 h-4.5 bg-white rounded-full shadow-sm"
                       />
                     </button>
                   </div>
                 ))}
 
-                <div className="pt-6">
-                  <p className="text-[9px] text-slate-500 uppercase font-extrabold mb-4 font-mono tracking-widest">Gateway Access Log</p>
-                  <div className="space-y-2.5 font-mono text-[10px] text-slate-400">
-                    <div className="flex justify-between p-2.5 bg-[#050505]/40 rounded-xl border border-white/5">
-                      <span className="text-slate-500">4/30/2026, 8:45 PM</span>
-                      <span className="text-neon-green font-bold">IP: 192.168.1.10 (GRANTED)</span>
+                <div className="pt-5">
+                  <p className="text-[10px] text-[#A3A3A3] uppercase font-bold mb-3 font-mono tracking-wider">Access Authorization Log</p>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex justify-between p-3 bg-[#111111] rounded-lg border border-[#2A2A2A]">
+                      <span className="text-[#A3A3A3] font-mono">2026-06-11 08:45:12</span>
+                      <span className="text-[#16A34A] font-semibold">IP: 192.168.1.10 (VERIFIED)</span>
                     </div>
-                    <div className="flex justify-between p-2.5 bg-[#050505]/40 rounded-xl border border-white/5">
-                      <span className="text-slate-500">4/29/2026, 11:12 AM</span>
-                      <span className="text-neon-red font-bold">IP: 103.24.12.5 (REJECTED)</span>
+                    <div className="flex justify-between p-3 bg-[#111111] rounded-lg border border-[#2A2A2A]">
+                      <span className="text-[#A3A3A3] font-mono">2026-06-10 11:12:04</span>
+                      <span className="text-[#DC2626] font-semibold">IP: 103.24.12.5 (DENIED)</span>
                     </div>
                   </div>
                 </div>
@@ -201,19 +195,17 @@ const SettingsPage = () => {
           )}
 
           {activeTab === 'Profile' && (
-            <div className="glass-panel p-6 md:p-8 space-y-6 border border-white/5 bg-[#0b0b0b]/60 relative">
-               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
-               
+            <div className="glass-panel p-6 md:p-8 space-y-5 border border-[#2A2A2A] bg-[#171717] relative">
                <div>
-                 <h3 className="text-sm font-extrabold text-white uppercase tracking-widest font-mono mb-1">Analyst Credentials</h3>
-                 <p className="text-xs text-slate-500 font-sans">Configure details visible on system audits</p>
+                 <h3 className="text-sm font-bold text-[#FAFAFA] mb-1">Analyst Profile</h3>
+                 <p className="text-xs text-[#A3A3A3]">Manage display identities associated with active logs</p>
                </div>
 
-               <div className="space-y-2">
-                 <label className="text-[9px] text-slate-500 uppercase font-extrabold ml-1 font-mono tracking-wider">Display Name</label>
+               <div className="space-y-1.5">
+                 <label className="text-[10px] text-[#A3A3A3] font-semibold uppercase tracking-wider ml-0.5">Analyst Display Name</label>
                  <input 
                    type="text" 
-                   className="w-full bg-[#050505]/40 border border-white/5 rounded-xl py-3 px-4 text-white text-xs focus:outline-none focus:border-neon-purple focus:ring-2 focus:ring-neon-purple/10 transition-all font-mono"
+                   className="w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg py-2.5 px-4 text-[#FAFAFA] text-xs focus:outline-none focus:border-[#4F46E5] transition-all"
                    value={localName}
                    onChange={(e) => setLocalName(e.target.value)}
                  />
@@ -222,14 +214,14 @@ const SettingsPage = () => {
                <button 
                  onClick={handleSave}
                  disabled={isSaving}
-                 className="flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-neon-purple to-neon-blue hover:from-neon-purple hover:to-[#5B21B6] text-white font-bold rounded-xl text-xs uppercase tracking-widest font-mono shadow-[0_0_12px_rgba(124,58,237,0.2)] transition-all cursor-pointer disabled:opacity-50"
+                 className="flex items-center gap-2 px-4 py-2.5 bg-[#4F46E5] hover:bg-[#3730A3] text-white font-semibold rounded-lg text-xs uppercase transition-all cursor-pointer disabled:opacity-50 shadow-sm"
                >
                  {isSaving ? (
                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                  ) : (
                    <Save size={14} />
                  )}
-                 SAVE_CHANGES
+                 <span>Save Profile</span>
                </button>
             </div>
           )}

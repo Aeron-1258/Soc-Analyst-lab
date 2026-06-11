@@ -5,81 +5,64 @@ import { ShieldAlert, ShieldCheck, Activity, Wifi } from 'lucide-react';
 const StatCards = ({ alerts }) => {
   const stats = [
     {
-      label: 'Active Threats',
+      label: 'Active Threat Vectors',
       value: alerts.length,
-      icon: <ShieldAlert className="text-neon-red font-bold" size={22} />,
-      color: 'border-neon-red/20 group-hover:border-neon-red/40',
-      bg: 'bg-neon-red/5',
-      trend: '+12% from last hour',
-      shadow: 'hover:shadow-[0_8px_30px_rgba(239,68,68,0.08)]'
+      icon: <ShieldAlert className="text-[#DC2626]" size={18} />,
+      badgeBg: 'bg-[#DC2626]/5 border-[#DC2626]/10',
+      trend: '+12% increase / hr'
     },
     {
-      label: 'Systems Guarded',
+      label: 'Systems Safeguarded',
       value: '1,248',
-      icon: <ShieldCheck className="text-neon-green font-bold" size={22} />,
-      color: 'border-neon-green/20 group-hover:border-neon-green/40',
-      bg: 'bg-neon-green/5',
-      trend: 'All systems operational',
-      shadow: 'hover:shadow-[0_8px_30px_rgba(16,185,129,0.08)]'
+      icon: <ShieldCheck className="text-[#16A34A]" size={18} />,
+      badgeBg: 'bg-[#16A34A]/5 border-[#16A34A]/10',
+      trend: 'Operational status: OK'
     },
     {
-      label: 'Uptime',
+      label: 'Infrastructure Uptime',
       value: '99.99%',
-      icon: <Activity className="text-neon-purple font-bold" size={22} />,
-      color: 'border-neon-purple/20 group-hover:border-neon-purple/40',
-      bg: 'bg-neon-purple/5',
-      trend: 'Normal latency',
-      shadow: 'hover:shadow-[0_8px_30px_rgba(124,58,237,0.08)]'
+      icon: <Activity className="text-[#4F46E5]" size={18} />,
+      badgeBg: 'bg-[#4F46E5]/5 border-[#4F46E5]/10',
+      trend: 'Latency: 11ms'
     },
     {
-      label: 'Network Load',
+      label: 'Network Ingress/Egress',
       value: '2.4 GB/s',
-      icon: <Wifi className="text-neon-cyan" size={22} />,
-      color: 'border-neon-cyan/20 group-hover:border-neon-cyan/40',
-      bg: 'bg-neon-cyan/5',
-      trend: 'Optimal throughput',
-      shadow: 'hover:shadow-[0_8px_30px_rgba(6,182,212,0.08)]'
+      icon: <Wifi className="text-[#0EA5E9]" size={18} />,
+      badgeBg: 'bg-[#0EA5E9]/5 border-[#0EA5E9]/10',
+      trend: 'Ingress bandwidth nominal'
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 font-sans">
       {stats.map((stat, i) => (
         <motion.div
           key={i}
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.08, duration: 0.5 }}
-          whileHover={{ y: -5 }}
-          className={`glass-panel p-6 border ${stat.color} ${stat.shadow} relative overflow-hidden group bg-[#0b0b0b]/60`}
+          transition={{ delay: i * 0.05, duration: 0.4 }}
+          className="bg-[#171717] border border-[#2A2A2A] rounded-xl p-5 shadow-sm relative overflow-hidden flex flex-col justify-between"
         >
-          {/* Subtle inside gradient sweep */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.01] via-transparent to-white/[0.02] pointer-events-none"></div>
-
-          <div className="flex justify-between items-start relative z-10">
+          <div className="flex justify-between items-start">
             <div>
-              <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider font-mono">
+              <p className="text-xs font-medium text-[#A3A3A3] tracking-tight">
                 {stat.label}
               </p>
-              <h4 className="text-3xl font-extrabold text-white mt-2 font-mono tracking-tight">
+              <h4 className="text-2.5xl font-semibold text-[#FAFAFA] mt-2 tracking-tight">
                 {stat.value}
               </h4>
             </div>
             
-            <div className={`p-3 rounded-xl border border-white/5 ${stat.bg} shadow-[0_4px_12px_rgba(0,0,0,0.3)]`}>
+            <div className={`p-2.5 rounded-lg border flex items-center justify-center ${stat.badgeBg}`}>
               {stat.icon}
             </div>
           </div>
           
-          <div className="mt-4 flex items-center gap-2 relative z-10">
-            <span className="text-[9px] uppercase tracking-widest font-extrabold text-slate-500 font-mono">
+          <div className="mt-4 flex items-center gap-2">
+            <span className="text-[10px] text-[#A3A3A3] font-medium">
               {stat.trend}
             </span>
-          </div>
-
-          {/* Large semi-transparent background icon for depth */}
-          <div className="absolute -right-6 -bottom-6 opacity-[0.02] group-hover:opacity-[0.04] group-hover:scale-105 transition-all duration-500 pointer-events-none">
-            {React.cloneElement(stat.icon, { size: 110 })}
           </div>
         </motion.div>
       ))}
