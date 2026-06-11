@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSocket } from '../context/SocketContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldAlert, Search, Download, Activity, X, ShieldX } from 'lucide-react';
+import { ShieldAlert, Download, Activity, X, ShieldX, KeyRound, UserX, Globe, Trash2, Zap } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import InvestigationModule from '../components/InvestigationModule';
 
@@ -20,7 +20,10 @@ const AlertsPage = () => {
 
   const handleBlock = (ip) => {
     setBlacklist(prev => [...new Set([ip, ...prev])]);
-    toast.success(`IP ${ip} blocked from investigation terminal`);
+    toast.success(`IP ${ip} blocked from investigation terminal`, {
+      icon: '🛡️',
+      style: { background: '#0b0b0b', color: '#fff', border: '1px solid #ef4444' }
+    });
     setSelectedAlert(null);
   };
 
@@ -72,31 +75,32 @@ const AlertsPage = () => {
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <ShieldAlert className="text-neon-red" /> Incident Management
+          <h2 className="text-xl md:text-2xl font-extrabold text-white flex items-center gap-2.5 tracking-tight font-sans">
+            <ShieldAlert className="text-neon-red" size={20} /> INCIDENT MANAGEMENT
           </h2>
-          <p className="text-slate-400 text-sm mt-1">Review and respond to system security events</p>
+          <p className="text-slate-400 text-xs md:text-sm font-medium mt-0.5">Review and respond to system security events</p>
         </div>
         
         <div className="flex items-center gap-3">
           <button 
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm transition-all"
+            className="flex items-center gap-2 px-4 py-2 bg-white/[0.02] hover:bg-white/[0.05] border border-white/10 text-slate-300 hover:text-white rounded-xl text-xs font-semibold font-mono tracking-wider transition-all cursor-pointer shadow-md"
           >
-            <Download size={16} /> Export
+            <Download size={14} /> EXPORT_DATA
           </button>
         </div>
       </div>
 
-      <div className="flex gap-2">
+      {/* Filter Tabs */}
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {['All', 'Critical', 'High', 'Medium', 'Low'].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+            className={`px-4.5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest font-mono transition-all cursor-pointer ${
               filter === f 
-                ? 'bg-neon-blue text-white shadow-neon-blue' 
-                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                ? 'bg-neon-purple/20 text-white border border-neon-purple/40 shadow-[0_0_12px_rgba(124,58,237,0.15)]' 
+                : 'bg-[#0b0b0b] text-slate-500 border border-white/5 hover:border-white/10 hover:text-slate-300'
             }`}
           >
             {f}
@@ -104,20 +108,23 @@ const AlertsPage = () => {
         ))}
       </div>
 
-      <div className="glass-panel overflow-hidden border border-slate-800/50">
+      {/* Alerts Table */}
+      <div className="glass-panel overflow-hidden border border-white/5 bg-[#0b0b0b]/60 relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
+
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-500 text-[10px] uppercase tracking-widest bg-slate-900/30">
-                <th className="px-6 py-4 font-semibold">Timestamp</th>
-                <th className="px-6 py-4 font-semibold">Severity</th>
-                <th className="px-6 py-4 font-semibold">Event Type</th>
-                <th className="px-6 py-4 font-semibold">Source IP</th>
-                <th className="px-6 py-4 font-semibold">Target</th>
-                <th className="px-6 py-4 font-semibold text-right">Action</th>
+              <tr className="border-b border-white/5 text-slate-500 text-[9px] uppercase tracking-widest font-mono bg-[#050505]/40">
+                <th className="px-6 py-4 font-extrabold">Timestamp</th>
+                <th className="px-6 py-4 font-extrabold">Severity</th>
+                <th className="px-6 py-4 font-extrabold">Event Type</th>
+                <th className="px-6 py-4 font-extrabold">Source IP</th>
+                <th className="px-6 py-4 font-extrabold">Target Node</th>
+                <th className="px-6 py-4 font-extrabold text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/50">
+            <tbody className="divide-y divide-white/5">
               <AnimatePresence>
                 {filteredAlerts.map((alert) => (
                   <motion.tr 
@@ -125,49 +132,49 @@ const AlertsPage = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="hover:bg-white/5 transition-colors group"
+                    className="hover:bg-white/[0.01] transition-colors group text-slate-300"
                   >
-                    <td className="px-6 py-4 text-xs text-slate-400 font-mono">
-                      {new Date(alert.timestamp).toLocaleString()}
+                    <td className="px-6 py-4 text-xs font-mono text-slate-500">
+                      {new Date(alert.timestamp).toLocaleString([], { hour12: false })}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                        alert.severity === 'Critical' ? 'bg-neon-red/10 text-neon-red border border-neon-red/30' :
-                        alert.severity === 'High' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/30' :
-                        alert.severity === 'Medium' ? 'bg-neon-yellow/10 text-neon-yellow border border-neon-yellow/30' :
-                        'bg-neon-green/10 text-neon-green border border-neon-green/30'
+                      <span className={`px-2 py-0.5 rounded text-[8px] font-extrabold tracking-wider uppercase border ${
+                        alert.severity === 'Critical' ? 'bg-neon-red/10 text-neon-red border-neon-red/20' :
+                        alert.severity === 'High' ? 'bg-neon-orange/10 text-neon-orange border-neon-orange/20' :
+                        alert.severity === 'Medium' ? 'bg-neon-yellow/10 text-neon-yellow border-neon-yellow/20' :
+                        'bg-neon-green/10 text-neon-green border-neon-green/20'
                       }`}>
                         {alert.severity}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm font-semibold text-white">
+                    <td className="px-6 py-4 text-xs font-semibold text-white">
                       {alert.type}
                     </td>
                     <td className="px-6 py-4 text-xs font-mono">
                       <div className="flex flex-col">
-                        <span className={blacklist.includes(alert.sourceIP) ? 'text-neon-red' : 'text-slate-300'}>{alert.sourceIP}</span>
+                        <span className={blacklist.includes(alert.sourceIP) ? 'text-neon-red font-bold' : 'text-slate-300'}>{alert.sourceIP}</span>
                         {blacklist.includes(alert.sourceIP) && (
-                          <span className="text-[9px] text-neon-red font-bold uppercase mt-1 flex items-center gap-1">
-                            <ShieldX size={10} /> BANNED
+                          <span className="text-[7px] text-neon-red font-bold uppercase tracking-widest mt-1 flex items-center gap-1 font-mono">
+                            <ShieldX size={8} /> BLOCKED
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-300 font-mono">
+                    <td className="px-6 py-4 text-xs text-slate-400 font-mono">
                       {alert.targetIP}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button 
                         onClick={() => openInvestigation(alert)}
-                        className={`text-xs font-bold transition-colors ${
+                        className={`text-[10px] font-extrabold uppercase tracking-wider font-mono transition-colors cursor-pointer ${
                           alert.type === "🚨 SUSPICIOUS SUCCESSFUL LOGIN" || alert.type?.includes("PHISHING") 
-                          ? "text-neon-red hover:text-white" 
-                          : "text-neon-blue hover:text-white"
+                          ? "text-neon-red hover:underline" 
+                          : "text-neon-purple hover:underline"
                         }`}
                       >
                         {alert.type === "🚨 SUSPICIOUS SUCCESSFUL LOGIN" || alert.type?.includes("PHISHING") 
-                          ? "Run Playbook" 
-                          : "Investigate"}
+                          ? "RUN PLAYBOOK" 
+                          : "INVESTIGATE"}
                       </button>
                     </td>
                   </motion.tr>
@@ -175,6 +182,11 @@ const AlertsPage = () => {
               </AnimatePresence>
             </tbody>
           </table>
+          {filteredAlerts.length === 0 && (
+            <div className="text-center py-12 text-slate-600 italic text-xs font-mono">
+              NO SECURITY INCIDENTS FOUND
+            </div>
+          )}
         </div>
       </div>
 
@@ -196,87 +208,93 @@ const AlertsPage = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => setSelectedAlert(null)}
-                  className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+                  className="fixed inset-0 bg-black/70 backdrop-blur-md z-40"
                 />
                 <motion.div 
                   initial={{ x: '100%' }}
                   animate={{ x: 0 }}
                   exit={{ x: '100%' }}
                   transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                  className="fixed top-0 right-0 h-full w-full max-w-xl bg-slate-950 border-l border-slate-800 z-50 p-8 overflow-y-auto shadow-2xl"
+                  className="fixed top-0 right-0 h-full w-full max-w-xl bg-[#050505] border-l border-white/5 z-50 p-8 overflow-y-auto shadow-2xl flex flex-col justify-between"
                 >
-                  <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                      <Activity className="text-neon-blue" /> Forensic Investigation
-                    </h3>
-                    <button 
-                      onClick={() => setSelectedAlert(null)}
-                      className="p-2 hover:bg-white/5 rounded-lg text-slate-400"
-                    >
-                      <X size={20} />
-                    </button>
+                  <div>
+                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
+                      <h3 className="text-sm font-extrabold text-white flex items-center gap-2 uppercase tracking-widest font-mono">
+                        <Activity className="text-neon-purple" size={16} /> Forensic Console
+                      </h3>
+                      <button 
+                        onClick={() => setSelectedAlert(null)}
+                        className="p-1.5 hover:bg-white/5 rounded-lg text-slate-400 cursor-pointer"
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="p-5 bg-[#0b0b0b] rounded-xl border border-white/5 relative">
+                        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
+                        <span className="text-[8px] text-slate-500 font-mono uppercase tracking-widest block mb-2">Event Details</span>
+                        <h4 className="text-md font-bold text-white mb-3">{selectedAlert.type}</h4>
+                        <div className="grid grid-cols-3 gap-4 text-xs font-mono">
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-[9px] text-slate-500 uppercase">Source</span>
+                            <span className="text-neon-purple font-bold">{selectedAlert.sourceIP}</span>
+                          </div>
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-[9px] text-slate-500 uppercase">Target Node</span>
+                            <span className="text-white">{selectedAlert.targetIP}</span>
+                          </div>
+                          <div className="flex flex-col gap-0.5 ml-auto text-right">
+                            <span className="text-[9px] text-slate-500 uppercase">Severity</span>
+                            <span className={selectedAlert.severity === 'Critical' ? 'text-neon-red font-bold' : 'text-neon-purple font-bold'}>{selectedAlert.severity}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <span className="text-[8px] text-slate-500 uppercase tracking-widest block ml-1 font-mono">Payload Stream</span>
+                        <div className="bg-black p-4 rounded-xl border border-white/5 font-mono text-[10px] text-neon-green overflow-hidden relative">
+                          <div className="absolute inset-0 bg-neon-green/5 animate-pulse pointer-events-none" />
+                          <p className="mb-2 opacity-45">// DEEP PACKET INSPECTION IN PROCESS...</p>
+                          <p>GET /api/v1/users?id=1' OR '1'='1' -- HTTP/1.1</p>
+                          <p>Host: secure-api.internal</p>
+                          <p>User-Agent: Mozilla/5.0 (Kali Linux) ...</p>
+                          <p className="mt-3 text-white font-bold uppercase">// ANALYSIS: SQL Injection query detected in parameters.</p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="p-4 bg-[#0b0b0b] rounded-xl border border-white/5">
+                          <span className="text-[8px] text-slate-500 uppercase tracking-widest block mb-2 font-mono">Threat Intel</span>
+                          <div className="space-y-1 text-xs font-mono">
+                            <p className="text-slate-300">Origin: <span className="text-white">Moscow, RU</span></p>
+                            <p className="text-slate-300">ISP: <span className="text-white">Rostelecom</span></p>
+                            <p className="text-slate-300">Score: <span className="text-neon-red font-bold">CRITICAL</span></p>
+                          </div>
+                        </div>
+                        <div className="p-4 bg-[#0b0b0b] rounded-xl border border-white/5">
+                          <span className="text-[8px] text-slate-500 uppercase tracking-widest block mb-2 font-mono">AI Recommendation</span>
+                          <p className="text-[10px] text-slate-400 leading-relaxed font-sans font-medium">
+                            Signature matches CVE-2023-4567. Force immediate IP lockdown and block incoming traffic vectors.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="space-y-6">
-                    <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
-                      <span className="text-[10px] text-slate-500 uppercase block mb-1">Event Summary</span>
-                      <h4 className="text-lg font-bold text-white mb-2">{selectedAlert.type}</h4>
-                      <div className="flex gap-4 text-xs">
-                        <div className="flex flex-col">
-                          <span className="text-slate-500">Source</span>
-                          <span className="text-neon-blue font-mono">{selectedAlert.sourceIP}</span>
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-slate-500">Target</span>
-                          <span className="text-white font-mono">{selectedAlert.targetIP}</span>
-                        </div>
-                        <div className="flex flex-col ml-auto text-right">
-                          <span className="text-slate-500">Severity</span>
-                          <span className={selectedAlert.severity === 'Critical' ? 'text-neon-red' : 'text-neon-yellow'}>{selectedAlert.severity}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <span className="text-[10px] text-slate-500 uppercase block ml-1">Deep Packet Inspection (DPI)</span>
-                      <div className="bg-black p-4 rounded-xl border border-slate-800 font-mono text-[11px] text-neon-green overflow-hidden relative">
-                        <div className="absolute inset-0 bg-neon-green/5 animate-pulse pointer-events-none" />
-                        <p className="mb-2 opacity-50">// ANALYZING PAYLOAD...</p>
-                        <p>GET /api/v1/users?id=1' OR '1'='1' -- HTTP/1.1</p>
-                        <p>Host: secure-api.internal</p>
-                        <p>User-Agent: Mozilla/5.0 (Kali Linux) ...</p>
-                        <p className="mt-2 text-white">REASON: Malicious SQL Pattern detected in QueryString</p>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
-                        <span className="text-[10px] text-slate-500 uppercase block mb-2">Attacker Intel</span>
-                        <div className="space-y-1 text-xs">
-                          <p className="text-white">Origin: <span className="text-slate-400">Moscow, RU</span></p>
-                          <p className="text-white">ISP: <span className="text-slate-400">Rostelecom</span></p>
-                          <p className="text-white">Reputation: <span className="text-neon-red">2/10 (MALICIOUS)</span></p>
-                        </div>
-                      </div>
-                      <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
-                        <span className="text-[10px] text-slate-500 uppercase block mb-2">AI Recommendation</span>
-                        <p className="text-[11px] text-slate-300 leading-relaxed">
-                          Signature matches CVE-2023-4567. Highly recommend immediate IP Blacklisting and WAF rule update.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="pt-4 flex gap-4">
-                      <button 
-                        onClick={() => handleBlock(selectedAlert.sourceIP)}
-                        className="flex-1 bg-neon-red/10 border border-neon-red/50 text-neon-red hover:bg-neon-red/20 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2"
-                      >
-                        <ShieldAlert size={18} /> Block & Terminate
-                      </button>
-                      <button className="flex-1 bg-slate-800 text-white hover:bg-slate-700 py-3 rounded-xl font-bold transition-all">
-                        Ignore Alert
-                      </button>
-                    </div>
+                  <div className="pt-6 border-t border-white/5 flex gap-4">
+                    <button 
+                      onClick={() => handleBlock(selectedAlert.sourceIP)}
+                      className="flex-1 bg-neon-red/10 border border-neon-red/30 text-neon-red hover:bg-neon-red/20 py-3.5 rounded-xl font-bold uppercase tracking-widest font-mono text-[10px] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <ShieldX size={14} /> BLOCK_ATTACKER
+                    </button>
+                    <button 
+                      onClick={() => setSelectedAlert(null)}
+                      className="flex-1 bg-white/[0.02] border border-white/10 text-slate-400 hover:text-white py-3.5 rounded-xl font-bold uppercase tracking-widest font-mono text-[10px] transition-all cursor-pointer"
+                    >
+                      Dismiss
+                    </button>
                   </div>
                 </motion.div>
               </>

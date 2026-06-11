@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { motion } from 'framer-motion';
-import { ShieldCheck, Lock, Mail, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldCheck, Mail, Lock, AlertCircle } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -32,96 +32,109 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen w-screen flex items-center justify-center bg-background relative overflow-hidden">
-      {/* Background Decor */}
-      <div className="absolute top-0 left-0 w-full h-full cyber-grid-bg opacity-10"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-neon-blue/5 rounded-full blur-[120px]"></div>
+    <div className="min-h-screen w-screen bg-[#030303] text-[#F8FAFC] flex items-center justify-center p-6 relative overflow-hidden font-sans">
+      {/* 1. Subtle Radial Backlight for Depth */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.02)_0%,transparent_60%)] pointer-events-none z-0" />
 
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md p-8 glass-panel border border-slate-700/50 relative z-10"
+      {/* 2. Centered Authentication Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 16, scale: 0.985 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-[400px] bg-[#0A0A0D]/55 border border-white/[0.04] backdrop-blur-2xl rounded-[24px] p-8 md:p-10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.85)] z-10 relative"
       >
+        {/* Header Section */}
         <div className="flex flex-col items-center mb-8">
-          <div className="p-4 bg-neon-blue/20 rounded-2xl border border-neon-blue/50 mb-4 shadow-[0_0_20px_rgba(14,165,233,0.3)]">
-            <ShieldCheck className="text-neon-blue" size={40} />
+          <div className="w-10 h-10 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-center mb-4 shadow-sm">
+            <ShieldCheck className="text-[#8B5CF6] w-5 h-5" />
           </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">
-            Intelli<span className="text-neon-blue">SOC</span> COMMAND
+          <h1 className="text-2xl font-semibold tracking-tight text-[#F8FAFC] font-display text-center">
+            Welcome back
           </h1>
-          <p className="text-slate-400 mt-2">Secure Analyst Terminal Access</p>
+          <p className="text-xs text-[#64748B] text-center mt-1.5 max-w-[280px] leading-relaxed">
+            Sign in to continue to Security Operations Center
+          </p>
         </div>
 
-        {error && (
-          <motion.div 
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="mb-6 p-3 bg-neon-red/10 border border-neon-red/50 rounded-lg flex items-center gap-3 text-neon-red text-sm"
-          >
-            <AlertCircle size={18} />
-            {error}
-          </motion.div>
-        )}
+        {/* Error Messages */}
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, height: 0, y: -8 }}
+              animate={{ opacity: 1, height: 'auto', y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -8 }}
+              className="mb-5 p-3 bg-red-500/5 border border-red-500/15 rounded-xl flex items-start gap-2.5 text-red-400 text-xs font-medium"
+            >
+              <AlertCircle size={15} className="shrink-0 mt-0.5" />
+              <span className="leading-normal">{error}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-300 ml-1">Work Email</label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
-              <input 
-                type="email" 
-                required 
-                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-neon-blue focus:ring-1 focus:ring-neon-blue/30 transition-all"
-                placeholder="analyst@agency.gov"
+        {/* Credentials Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1.5">
+            <label htmlFor="email" className="text-xs font-medium text-[#CBD5E1] ml-0.5">
+              Email address
+            </label>
+            <div className="relative flex items-center">
+              <Mail className="absolute left-3.5 text-[#64748B] pointer-events-none" size={15} />
+              <input
+                id="email"
+                type="email"
+                required
+                placeholder="name@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-[#030303]/30 border border-white/5 hover:border-white/10 focus:border-[#8B5CF6] rounded-xl py-3 pl-10 pr-4 text-sm text-[#F8FAFC] placeholder:text-[#64748B]/35 focus:outline-none transition-all duration-200"
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-300 ml-1">Security Token (Password)</label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
-              <input 
-                type="password" 
-                required 
-                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-neon-blue focus:ring-1 focus:ring-neon-blue/30 transition-all"
-                placeholder="••••••••"
+          <div className="space-y-1.5">
+            <label htmlFor="password" className="text-xs font-medium text-[#CBD5E1] ml-0.5">
+              Password
+            </label>
+            <div className="relative flex items-center">
+              <Lock className="absolute left-3.5 text-[#64748B] pointer-events-none" size={15} />
+              <input
+                id="password"
+                type="password"
+                required
+                placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-[#030303]/30 border border-white/5 hover:border-white/10 focus:border-[#8B5CF6] rounded-xl py-3 pl-10 pr-4 text-sm text-[#F8FAFC] placeholder:text-[#64748B]/35 focus:outline-none transition-all duration-200"
               />
             </div>
           </div>
 
-          <button
-            disabled={loading}
-            className="w-full bg-neon-blue hover:bg-neon-blue/90 text-white font-bold py-3 rounded-xl shadow-[0_0_15px_rgba(14,165,233,0.4)] transition-all flex items-center justify-center gap-2"
-          >
-            {loading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-            ) : (
-              <>
-                <ShieldCheck size={20} />
-                {isSignup ? 'Initialize Account' : 'Establish Connection'}
-              </>
-            )}
-          </button>
+          {/* Submit Button */}
+          <div className="pt-2">
+            <motion.button
+              whileHover={{ y: -0.5 }}
+              whileTap={{ scale: 0.985 }}
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-semibold py-3 rounded-xl transition-all duration-200 text-sm shadow-[0_4px_12px_rgba(139,92,246,0.15)] flex items-center justify-center gap-2 cursor-pointer"
+            >
+              {loading ? (
+                <div className="w-4.5 h-4.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              ) : (
+                isSignup ? 'Create account' : 'Sign in'
+              )}
+            </motion.button>
+          </div>
         </form>
 
+        {/* Switch Login/Signup */}
         <div className="mt-8 text-center">
-          <button 
+          <button
             onClick={() => setIsSignup(!isSignup)}
-            className="text-slate-400 text-sm hover:text-neon-blue transition-colors"
+            className="text-xs text-[#64748B] hover:text-[#CBD5E1] transition-colors font-medium"
           >
-            {isSignup ? 'Already have an account? Login' : "Don't have an account? Request Access"}
+            {isSignup ? 'Already have an account? Sign in' : 'Create an account'}
           </button>
-        </div>
-
-        <div className="mt-8 pt-6 border-t border-slate-800/50 flex justify-center gap-4">
-          <span className="text-[10px] text-slate-600 font-mono">SECURE ACCESS GATEWAY</span>
-          <span className="text-[10px] text-slate-600 font-mono">•</span>
-          <span className="text-[10px] text-slate-600 font-mono">ENCRYPTION: AES-256</span>
         </div>
       </motion.div>
     </div>

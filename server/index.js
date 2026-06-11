@@ -93,8 +93,10 @@ io.on('connection', (socket) => {
     const alertData = generateAlert();
     try {
       socket.emit('new_alert', alertData);
-      const alert = new Alert(alertData);
-      await alert.save();
+      if (mongoose.connection.readyState === 1) {
+        const alert = new Alert(alertData);
+        await alert.save();
+      }
     } catch (err) {
       console.error('⚠️ DB Error (Alert not saved):', err.message);
     }
@@ -104,8 +106,10 @@ io.on('connection', (socket) => {
     const trafficData = generateTraffic();
     try {
       socket.emit('traffic_update', trafficData);
-      const traffic = new Traffic(trafficData);
-      await traffic.save();
+      if (mongoose.connection.readyState === 1) {
+        const traffic = new Traffic(trafficData);
+        await traffic.save();
+      }
     } catch (err) {
       // Silent error for traffic to avoid console flood
     }
@@ -115,8 +119,10 @@ io.on('connection', (socket) => {
     const threatData = generateThreatMapPoint();
     try {
       socket.emit('new_threat', threatData);
-      const threat = new Threat(threatData);
-      await threat.save();
+      if (mongoose.connection.readyState === 1) {
+        const threat = new Threat(threatData);
+        await threat.save();
+      }
     } catch (err) {
       // Silent error for threat
     }
@@ -198,11 +204,12 @@ io.on('connection', (socket) => {
       targetIP: "AUTH-SERVER-01",
       metadata: scenario // Attach the full scenario for investigation
     };
-    
     try {
       socket.emit('new_alert', successAlert);
-      const alert = new Alert(successAlert);
-      await alert.save();
+      if (mongoose.connection.readyState === 1) {
+        const alert = new Alert(successAlert);
+        await alert.save();
+      }
     } catch (err) {
       console.error('⚠️ DB Error (Compromise alert not saved):', err.message);
     }
@@ -257,9 +264,11 @@ io.on('connection', (socket) => {
 
     try {
       io.emit('new_alert', phishingAlert);
-      const alert = new Alert(phishingAlert);
-      await alert.save();
-      console.log("✅ Phishing alert broadcasted and saving to DB...");
+      if (mongoose.connection.readyState === 1) {
+        const alert = new Alert(phishingAlert);
+        await alert.save();
+        console.log("✅ Phishing alert broadcasted and saving to DB...");
+      }
     } catch (err) {
       console.error('⚠️ DB Error (Phishing alert not saved):', err.message);
     }
@@ -288,7 +297,9 @@ app.post('/api/attack/sql-injection', async (req, res) => {
     sourceIP: req.body.ip || "103.24.12.8",
     targetIP: "DB-PROD-01"
   });
-  await alert.save();
+  if (mongoose.connection.readyState === 1) {
+    await alert.save();
+  }
   io.emit('new_alert', alert);
   res.json({ message: 'SQL Injection Event Logged' });
 });
@@ -302,7 +313,9 @@ app.post('/api/attack/ddos', async (req, res) => {
     sourceIP: "BOTNET_CLUSTER_A",
     targetIP: "GATEWAY_LB"
   });
-  await alert.save();
+  if (mongoose.connection.readyState === 1) {
+    await alert.save();
+  }
   io.emit('new_alert', alert);
   res.json({ message: 'DDoS Event Logged' });
 });
@@ -316,7 +329,9 @@ app.post('/api/attack/malware', async (req, res) => {
     sourceIP: "192.168.1.45",
     targetIP: "WS-ANALYST-12"
   });
-  await alert.save();
+  if (mongoose.connection.readyState === 1) {
+    await alert.save();
+  }
   io.emit('new_alert', alert);
   res.json({ message: 'Malware Event Logged' });
 });

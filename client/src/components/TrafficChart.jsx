@@ -11,56 +11,58 @@ import {
 
 const TrafficChart = ({ data }) => {
   return (
-    <div className="h-[250px] w-full">
+    <div className="h-[250px] w-full font-mono text-[10px]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={data}>
           <defs>
             <linearGradient id="colorIn" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
-              <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.25}/>
+              <stop offset="95%" stopColor="#7C3AED" stopOpacity={0}/>
             </linearGradient>
             <linearGradient id="colorOut" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#a855f7" stopOpacity={0.3}/>
-              <stop offset="95%" stopColor="#a855f7" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.25}/>
+              <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
           <XAxis 
             dataKey="timestamp" 
             hide 
           />
           <YAxis 
-            stroke="#64748b" 
-            fontSize={12} 
+            stroke="#475569" 
+            fontSize={10} 
             tickLine={false} 
             axisLine={false} 
-            tickFormatter={(value) => `${value}Mbps`}
+            tickFormatter={(value) => `${value}Mb`}
           />
           <Tooltip 
             contentStyle={{ 
-              backgroundColor: '#0f172a', 
-              borderColor: '#1e293b', 
-              borderRadius: '8px',
-              fontSize: '12px'
+              backgroundColor: '#0b0b0b', 
+              borderColor: 'rgba(255,255,255,0.05)', 
+              borderRadius: '12px',
+              fontSize: '11px',
+              color: '#fff',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.8)'
             }}
             itemStyle={{ color: '#fff' }}
           />
           <Area 
             type="monotone" 
             dataKey="incoming" 
-            stroke="#0ea5e9" 
+            stroke="#7C3AED" 
             fillOpacity={1} 
             fill="url(#colorIn)" 
-            strokeWidth={2}
+            strokeWidth={1.5}
             isAnimationActive={false}
           />
           <Area 
             type="monotone" 
             dataKey="outgoing" 
-            stroke="#a855f7" 
+            stroke="#3B82F6" 
             fillOpacity={1} 
             fill="url(#colorOut)" 
-            strokeWidth={2}
+            strokeWidth={1.5}
             isAnimationActive={false}
           />
         </AreaChart>

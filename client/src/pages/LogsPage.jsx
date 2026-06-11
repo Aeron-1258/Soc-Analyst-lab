@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSocket } from '../context/SocketContext';
-import { FileText, Search, Download, Filter } from 'lucide-react';
+import { FileText, Download, Filter } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 
@@ -51,49 +51,58 @@ const LogsPage = () => {
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            <FileText className="text-neon-blue" /> System Logs
+          <h2 className="text-xl md:text-2xl font-extrabold text-white flex items-center gap-2.5 tracking-tight font-sans">
+            <FileText className="text-neon-purple" size={20} /> SYSTEM LOGS
           </h2>
-          <p className="text-slate-400 text-sm mt-1">Raw security events and audit trails</p>
+          <p className="text-slate-400 text-xs md:text-sm font-medium mt-0.5">Raw security events and audit trails</p>
         </div>
         
         <div className="flex items-center gap-3">
-          <button className="p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-all">
-            <Filter size={18} />
+          <button className="p-2.5 bg-white/[0.02] hover:bg-white/[0.05] border border-white/5 hover:border-white/10 text-slate-300 rounded-xl transition-all cursor-pointer">
+            <Filter size={16} />
           </button>
           <button 
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 bg-neon-blue text-white rounded-lg text-sm font-bold shadow-neon-blue transition-all"
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-neon-purple to-neon-blue hover:from-neon-purple hover:to-[#5B21B6] text-white rounded-xl text-xs font-bold font-mono tracking-wider shadow-[0_0_12px_rgba(124,58,237,0.2)] transition-all cursor-pointer"
           >
-            <Download size={16} /> Export CSV
+            <Download size={14} /> EXPORT_CSV
           </button>
         </div>
       </div>
 
-      <div className="glass-panel overflow-hidden border border-slate-800/50">
-        <div className="bg-slate-900/50 p-4 border-b border-slate-800 flex justify-between items-center">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Live Audit Stream</span>
-          <span className="text-[10px] text-neon-green animate-pulse">● SECURE CONNECTION ACTIVE</span>
+      {/* Terminal Glass Container */}
+      <div className="glass-panel overflow-hidden border border-white/5 bg-[#0b0b0b]/60 relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent"></div>
+
+        <div className="bg-[#050505]/60 p-4 border-b border-white/5 flex justify-between items-center">
+          <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">Live Audit Stream</span>
+          <span className="text-[9px] text-neon-green font-bold font-mono flex items-center gap-1.5">
+            <span className="w-1 h-1 bg-neon-green rounded-full animate-pulse shadow-[0_0_4px_#10b981]"></span>
+            SECURE_LINK_UP
+          </span>
         </div>
-        <div className="max-h-[600px] overflow-y-auto font-mono text-[11px] p-4 space-y-1.5 scrollbar-hide">
-          {filteredLogs.map((log, i) => (
-            <div key={log.id} className="flex gap-4 group hover:bg-white/5 p-1 rounded transition-colors">
-              <span className="text-slate-600 shrink-0">[{new Date(log.timestamp).toISOString()}]</span>
-              <span className={`shrink-0 font-bold ${
-                log.severity === 'Critical' ? 'text-neon-red' : 
-                log.severity === 'High' ? 'text-orange-500' : 'text-neon-blue'
+        
+        <div className="max-h-[600px] overflow-y-auto font-mono text-[11px] p-5 space-y-2.5 scrollbar-hide bg-[#050505]/20">
+          {filteredLogs.map((log) => (
+            <div key={log.id} className="flex gap-4 items-start group hover:bg-white/[0.02] p-1.5 rounded-lg transition-colors text-slate-400">
+              <span className="text-slate-600 shrink-0 font-medium">[{new Date(log.timestamp).toISOString()}]</span>
+              <span className={`shrink-0 font-extrabold uppercase text-[9px] px-1.5 py-0.5 rounded border ${
+                log.severity === 'Critical' ? 'bg-neon-red/10 border-neon-red/20 text-neon-red' : 
+                log.severity === 'High' ? 'bg-neon-orange/10 border-neon-orange/20 text-neon-orange' : 'bg-neon-purple/10 border-neon-purple/20 text-neon-purple'
               }`}>
-                {log.severity.toUpperCase()}
+                {log.severity}
               </span>
-              <span className="text-slate-300">
-                Event: <span className="text-white">{log.type}</span> from <span className="text-neon-cyan">{log.sourceIP}</span> 
-                target <span className="text-slate-400">{log.targetIP}</span>
+              <span className="text-slate-300 leading-relaxed">
+                Event: <span className="text-white font-bold">{log.type}</span> from <span className="text-neon-cyan font-bold">{log.sourceIP}</span> 
+                target <span className="text-slate-500 font-semibold">{log.targetIP}</span>
               </span>
-              <span className="ml-auto text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity">ID: {log.id}</span>
+              <span className="ml-auto text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity font-mono text-[9px]">ID: {log.id}</span>
             </div>
           ))}
           {filteredLogs.length === 0 && (
-            <div className="text-center py-10 text-slate-600 italic">No logs detected in the current session.</div>
+            <div className="text-center py-16 text-slate-600 italic text-xs font-mono">
+              NO STREAM LOGS RECORDED IN THIS SESSION
+            </div>
           )}
         </div>
       </div>
